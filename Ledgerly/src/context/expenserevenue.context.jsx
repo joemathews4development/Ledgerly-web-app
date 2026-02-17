@@ -9,12 +9,10 @@ function DataWrapper(props) {
     const [revenues, setRevenues] = useState(null)
 
     const handleSetExpenses = (expenses) => {
-        console.log(expenses)
         setExpenses(expenses)
     }
 
     const handleSetRevenues = (revenues) => {
-        console.log(revenues)
         setRevenues(revenues)
     }
 
@@ -50,19 +48,20 @@ function DataWrapper(props) {
             acc[monthKey].push(transaction)
             return acc
         }, {})
+        console.log(groupedByMonth)
         // Sort within each month
         Object.keys(groupedByMonth).forEach(month => {
             groupedByMonth[month].sort((a, b) => new Date(a.date) - new Date(b.date))
         })
+        console.log(groupedByMonth)
         const sortedMonths = Object.entries(groupedByMonth).sort((a, b) => b[0].localeCompare(a[0]))
+        console.log(groupedByMonth)
         return sortedMonths
     }
 
     const monthOverviews = useMemo(() => {
         if (!expenses || !revenues) return null
-
         return getMonthlyOverview(expenses, revenues)
-        // console.log(monthOverviews)
     }, [expenses, revenues])
 
     const passedContext = {

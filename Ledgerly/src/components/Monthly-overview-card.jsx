@@ -1,8 +1,6 @@
 import { Doughnut } from 'react-chartjs-2';
 
 function MonthlyCard({month, transactions}) {
-
-    console.log(month, transactions)
     const chartData = {
         labels: ['Expenses', 'Revenues'],
         datasets: [

@@ -7,13 +7,14 @@ import AccountsPage from './pages/AccountsPage'
 import AboutPage from './pages/AboutPage'
 import NotFound from './pages/NotFoundPage'
 import MonthDetailsPage from './pages/MonthDetailsPage'
+import { useContext } from "react";
+import { DataContext } from "./context/expenserevenue.context"
 
 function App() {
 
   return (
     <>
       <NavigationBar/>
-
       <Routes>
           <Route path="/" element={<HomePage/>}></Route> 
           <Route path="/accounts" element={<AccountsPage/>}></Route>
@@ -23,6 +24,7 @@ function App() {
       </Routes>
     </>
   )
+
 }
 
 export default App

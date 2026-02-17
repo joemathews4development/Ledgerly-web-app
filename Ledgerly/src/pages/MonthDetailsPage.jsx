@@ -1,35 +1,24 @@
-import React, { useEffect } from 'react'
+import { useContext, useState } from "react";
+import { DataContext } from "../context/expenserevenue.context"
+import { useParams } from "react-router-dom";
+import TransactionCard from "../components/TransactionCard";
 
 function MonthDetailsPage(props) {
 
-    const [expenses, setExpenses] = useState(null)
-    const [revenues, setRevenues] = useState(null)
+    const {expenses, revenues, monthOverviews, getData} = useContext(DataContext)
 
-    useEffect(() => {
+    const params = useParams()
 
-    }, [])
-
-    const getData = async () => {
-        try {
-        const [expensesResponse, revenuesResponse] = await Promise.all([
-            axios.get(`${import.meta.env.VITE_SERVER_URL}/expenses`),
-            axios.get(`${import.meta.env.VITE_SERVER_URL}/revenues`)
-        ])
-
-        const expensesData = expensesResponse.data
-        const revenuesData = revenuesResponse.data
-
-        setExpenses(expensesData)
-        setRevenues(revenuesData)
-
-        // compute(expensesData, revenuesData)
-        } catch (error) {
-        console.log(error)
-        }
-    }
+     const monthOverview = monthOverviews.find(([month, transactions]) => month === params.yearMonth)
 
     return (
-        <div>MonthDetailsPage</div>
+        <div>
+            {monthOverview[1].map((transaction) => {
+                return(
+                    <TransactionCard transaction={transaction}/>
+                )
+            })}
+        </div>
     )
 }
 

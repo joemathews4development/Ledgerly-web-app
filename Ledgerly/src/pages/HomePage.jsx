@@ -97,10 +97,10 @@ function HomePage() {
           </Button>
         </Modal.Footer>
       </Modal>
-      {monthOverviews.map(([month, transactions]) => {
+      {monthOverviews.map(([month, transactions], index) => {
         return (
           <Link to={`/month-details/${month}`}>
-            <MonthlyCard key={month} month={month} transactions={transactions} />
+            <MonthlyCard key={transactions[0].id} month={month} transactions={transactions} />
           </Link>
         )
       })}
