@@ -1,4 +1,7 @@
 import { Doughnut } from 'react-chartjs-2';
+import DonutChart from './DonutChart';
+import MonthlyTransactionsBar from './DonutChart';
+import Stack from 'react-bootstrap/Stack'
 
 function MonthlyCard({month, transactions}) {
     const chartData = {
@@ -20,16 +23,20 @@ function MonthlyCard({month, transactions}) {
         ],
     }
 
+    const totalExpense = transactions.reduce((sum, transaction) => transaction.type === "expense" && sum + transaction.amount)
+    const totalRevenue = transactions.reduce((sum, transaction) => transaction.type === "revenue" && sum + transaction.amount)
+
     return (
-        <div>
+        <div className="w-75 mx-auto">
             <h1>{month}</h1>
-            {/* <Doughnut data={chartData} /> */}
-            {transactions.map((transaction, index) => {
+            <MonthlyTransactionsBar monthTransactions={transactions} />
+            {transactions.slice(0, 5).map((transaction, index) => {
                 return (
-                    <div key={index}>
-                        <p>{transaction.createdAt}</p>
-                        <p>{transaction.amount}</p>
-                    </div>
+                    <Stack direction='horizontal' className="align-items-center border-bottom py-3 my-2">
+                        <div className="w-100">{transaction.createdAt}</div>
+                        <div className="w-100">{transaction.title}</div>
+                        <div className={`w-100 ${transaction.type === "expense" ? "text-danger" : "text-success"}`}>{transaction.amount}</div>
+                    </Stack>
                 )
             })}
         </div>

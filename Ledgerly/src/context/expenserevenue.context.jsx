@@ -7,6 +7,7 @@ function DataWrapper(props) {
 
     const [expenses, setExpenses] = useState(null)
     const [revenues, setRevenues] = useState(null)
+    const [accounts, setAccounts] = useState(null)
 
     const handleSetExpenses = (expenses) => {
         setExpenses(expenses)
@@ -18,14 +19,17 @@ function DataWrapper(props) {
 
     const getData = async () => {
     try {
-      const [expensesResponse, revenuesResponse] = await Promise.all([
+      const [expensesResponse, revenuesResponse, accountsResponse] = await Promise.all([
         axios.get(`${import.meta.env.VITE_SERVER_URL}/expenses`),
-        axios.get(`${import.meta.env.VITE_SERVER_URL}/revenues`)
+        axios.get(`${import.meta.env.VITE_SERVER_URL}/revenues`),
+        axios.get(`${import.meta.env.VITE_SERVER_URL}/accounts`)
       ])
       const expensesData = expensesResponse.data
       const revenuesData = revenuesResponse.data
+      const accountsData = accountsResponse.data
       handleSetExpenses(expensesData)
       handleSetRevenues(revenuesData)
+      setAccounts(accountsData)
     } catch (error) {
       console.log(error)
     }
@@ -65,7 +69,7 @@ function DataWrapper(props) {
     }, [expenses, revenues])
 
     const passedContext = {
-        expenses, revenues, monthOverviews,
+        expenses, revenues, accounts, monthOverviews,
         getData, handleSetExpenses, handleSetRevenues
     }
 

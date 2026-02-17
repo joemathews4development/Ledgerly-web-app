@@ -7,8 +7,6 @@ import AccountsPage from './pages/AccountsPage'
 import AboutPage from './pages/AboutPage'
 import NotFound from './pages/NotFoundPage'
 import MonthDetailsPage from './pages/MonthDetailsPage'
-import { useContext } from "react";
-import { DataContext } from "./context/expenserevenue.context"
 
 function App() {
 
