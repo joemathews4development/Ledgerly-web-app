@@ -6,14 +6,11 @@ import Row from 'react-bootstrap/Row';
 import { useState } from 'react';
 import axios from 'axios';
 
-function ExpenseForm({hideForm}) {
-
-    const [validated, setValidated] = useState(false)
-
+function RevenueForm() {
     const [title, setTitle] = useState("")
     const [amount, setAmount] = useState(0)
     const [category, setCategory] = useState("")
-    const [vendor, setVendor] = useState("")
+    const [payer, setPayer] = useState("")
     const [note, setNote] = useState("")
     const [date, setDate] = useState("")
 
@@ -25,7 +22,7 @@ function ExpenseForm({hideForm}) {
     const handleOnClickTitle = (event) => setTitle(event.target.value)
     const handleOnClickAmount = (event) => setAmount(event.target.value)
     const handleOnClickCategory = (event) => setCategory(event.target.value)
-    const handleOnClickVendor = (event) => setVendor(event.target.value)
+    const handleOnClickPayer = (event) => setPayer(event.target.value)
     const handleOnClickNote = (event) => setNote(event.target.value)
     const handleOnClickDate = (event) => setDate(event.target.value)
 
@@ -34,20 +31,20 @@ function ExpenseForm({hideForm}) {
         if (!checkValidity()) {
             return
         }
-        const newExpense = {
+        const newRevenue = {
             accountId: "c3f5b2e8-9d43-4e2a-8c6b-3f4e5d6c7a82", 
             title: title, 
             amount: amount, 
             category: category, 
-            vendor: vendor, 
+            payerName: payer, 
             note: note, 
             receiptUrl: "", 
             createdAt: new Date(date)
         }
         console.log("saving")
-        console.log(newExpense)
+        console.log(newRevenue)
         try {
-            await axios.post(`${import.meta.env.VITE_SERVER_URL}/expenses`, newExpense)
+            await axios.post(`${import.meta.env.VITE_SERVER_URL}/revenues`, newRevenue)
             hideForm()
         } catch (error) {
             console.log(error)
@@ -59,20 +56,14 @@ function ExpenseForm({hideForm}) {
         if (title.trim() === "") {
             setTitleError("Title is required")
             isValid = false
-        } else {
-            setTitleError("")
         }
         if (amount <= 0) {
             setAmountError("Amount must be greater than 0")
             isValid = false
-        } else {
-            setAmountError("")
         }
         if (category.trim() === "") {
             setCategoryError("Category is required")
             isValid = false
-        } else {
-            setCategoryError("")
         }
         const newDate = new Date(date)
         const tomorrow = new Date()
@@ -81,8 +72,6 @@ function ExpenseForm({hideForm}) {
         if (newDate > tomorrow) {
             setDateError("Date must be in the past")
             isValid = false
-        } else {
-            setDateError("")
         }
         console.log(`Expense form entries are ${isValid}`)
         return isValid
@@ -99,21 +88,21 @@ function ExpenseForm({hideForm}) {
                 </Form.Group>
                 <Form.Group as={Col} controlId="formBasicAmount">
                     <FloatingLabel controlId="floatingInput" label="Amount" className="mb-3">
-                        <Form.Control type="number" placeholder="0" onChange={handleOnClickAmount} isInvalid={!!amountError}/>
-                        <Form.Control.Feedback type="invalid" className='text-start'>{amountError}</Form.Control.Feedback>
+                        <Form.Control type="number" placeholder="0" onChange={handleOnClickAmount} isInvalid={!!titleError}/>
+                        <Form.Control.Feedback type="invalid" className='text-start'>{titleError}</Form.Control.Feedback>
                     </FloatingLabel>
                 </Form.Group>
             </Row>
             <Row className='mb-3'>
                 <Form.Group as={Col} controlId="formBasicCategory">
                     <FloatingLabel controlId="floatingInput" label="Category" className="mb-3">
-                        <Form.Control type="text" placeholder="0" onChange={handleOnClickCategory} isInvalid={!!categoryError}/>
-                        <Form.Control.Feedback type="invalid" className='text-start'>{categoryError}</Form.Control.Feedback>
+                        <Form.Control type="text" placeholder="0" onChange={handleOnClickCategory} isInvalid={!!titleError}/>
+                        <Form.Control.Feedback type="invalid" className='text-start'>{titleError}</Form.Control.Feedback>
                     </FloatingLabel>
                 </Form.Group>
                 <Form.Group as={Col} controlId="formBasicVendor">
                     <FloatingLabel controlId="floatingInput" label="Vendor" className="mb-3">
-                        <Form.Control type="text" placeholder="0" onChange={handleOnClickVendor}/>
+                        <Form.Control type="text" placeholder="0" onChange={handleOnClickPayer}/>
                     </FloatingLabel>
                 </Form.Group>
             </Row>
@@ -125,17 +114,17 @@ function ExpenseForm({hideForm}) {
                 </Form.Group>
                 <Form.Group as={Col} controlId="formBasicDate">
                     <FloatingLabel controlId="floatingInput" label="Date" className="mb-3">
-                        <Form.Control type="date" onChange={handleOnClickDate} isInvalid={!!dateError}/>
-                        <Form.Control.Feedback type="invalid" className='text-start'>{dateError}</Form.Control.Feedback>
+                        <Form.Control type="date" onChange={handleOnClickDate} isInvalid={!!titleError}/>
+                        <Form.Control.Feedback type="invalid" className='text-start'>{titleError}</Form.Control.Feedback>
                     </FloatingLabel>
                 </Form.Group>
             </Row>
 
             <Button variant="primary" type="submit">
-                Add Expense
+                Add Revenue
             </Button>
         </Form>
     )
 }
 
-export default ExpenseForm
+export default RevenueForm
