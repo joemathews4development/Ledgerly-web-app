@@ -7,6 +7,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button'
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 
 function AccountCard({ account }) {
@@ -151,9 +152,11 @@ function AccountCard({ account }) {
                         Save
                     </Button>
                 </div>
-                <Button variant="primary" size="sm" className="me-2" hidden={isEditing}>
+                <Link to={`/accounts/${account.id}/transactions`}>
+                    <Button variant="primary" size="sm" className="me-2" hidden={isEditing}>
                         Show Transactions
                     </Button>
+                </Link>
             </div>
         </div>
     )
