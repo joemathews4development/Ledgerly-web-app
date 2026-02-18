@@ -1,7 +1,8 @@
 import { Doughnut } from 'react-chartjs-2';
-import DonutChart from './DonutChart';
-import MonthlyTransactionsBar from './DonutChart';
+import DonutChart from './BarChart';
+import MonthlyTransactionsBar from './BarChart';
 import Stack from 'react-bootstrap/Stack'
+import MonthlyTransactionsDonut from './DonutChart';
 
 function MonthlyCard({month, transactions}) {
     const chartData = {
@@ -34,7 +35,16 @@ function MonthlyCard({month, transactions}) {
     return (
         <div className="w-75 mx-auto">
             <h1>{formattedMonth}</h1>
-            <MonthlyTransactionsBar monthTransactions={transactions} />
+            <div className='d-flex align-items-center justify-content-center py-5'>
+                <div className='w-50'>
+                    <h4>Expenses Chart</h4>
+                    <MonthlyTransactionsDonut monthTransactions={transactions.filter((transaction) => transaction.type === "expense")} />
+                </div>
+                <div className='w-50'>
+                    <h4>Revenues Chart</h4>
+                    <MonthlyTransactionsDonut monthTransactions={transactions.filter((transaction) => transaction.type === "revenue")} />
+                </div>
+            </div>
             {transactions.slice(0, 5).map((transaction, index) => {
                 const formattedDate = new Date(transaction.createdAt).toLocaleString("en-US", {
                     year: "numeric",

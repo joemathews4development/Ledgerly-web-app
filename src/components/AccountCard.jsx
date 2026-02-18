@@ -108,7 +108,7 @@ function AccountCard({ account }) {
 
     return (
         <div className="d-flex justify-content-center align-items-center border-bottom p-3">
-            <img src={Card} alt="" />
+            <img src={Card} alt="" style={{width: "25%", height: "10%"}} />
             <div>
                 <div className="d-flex justify-content-end m-5">
                     <Button variant="primary" size="sm" className="me-2" onClick={toggleEditing} hidden={isEditing}>
