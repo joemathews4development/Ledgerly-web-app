@@ -52,14 +52,11 @@ function DataWrapper(props) {
             acc[monthKey].push(transaction)
             return acc
         }, {})
-        console.log(groupedByMonth)
         // Sort within each month
         Object.keys(groupedByMonth).forEach(month => {
             groupedByMonth[month].sort((a, b) => new Date(a.date) - new Date(b.date))
         })
-        console.log(groupedByMonth)
         const sortedMonths = Object.entries(groupedByMonth).sort((a, b) => b[0].localeCompare(a[0]))
-        console.log(groupedByMonth)
         return sortedMonths
     }
 

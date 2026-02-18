@@ -13,7 +13,7 @@ function App() {
   return (
     <>
       <NavigationBar/>
-      <Routes className="min-vh-100">
+      <Routes>
           <Route path="/" element={<HomePage/>}></Route> 
           <Route path="/accounts" element={<AccountsPage/>}></Route>
           <Route path="/month-details/:yearMonth" element={<MonthDetailsPage/>}></Route>

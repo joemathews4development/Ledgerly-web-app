@@ -5,27 +5,22 @@ import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel'
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button'
+import Button from 'react-bootstrap/Button';
 import axios from "axios";
 
+function AddAccountForm({ hideForm }) {
 
-function AccountCard({ account }) {
-
-    const { getData } = useContext(DataContext)
-
-    const [title, setTitle] = useState(account.name)
-    const [type, setType] = useState(account.type)
-    const [balance, setBalance] = useState(account.balance)
-    const [currency, setCurrency] = useState(account.currency)
-    const [startDate, setStartDate] = useState(account.createdAt)
+    const [title, setTitle] = useState("")
+    const [type, setType] = useState("")
+    const [balance, setBalance] = useState("")
+    const [currency, setCurrency] = useState("")
+    const [startDate, setStartDate] = useState("")
 
     const [titleError, setTitleError] = useState("")
     const [typeError, setTypeError] = useState("")
     const [balanceError, setBalanceError] = useState("")
     const [currencyError, setCurrencyError] = useState("")
     const [startDateError, setStartDateError] = useState("")
-
-    const [isEditing, setIsEditing] = useState(false)
 
     const handleOnChangeTitle = (event) => setTitle(event.target.value)
     const handleOnChangeType = (event) => setType(event.target.value)
@@ -69,28 +64,15 @@ function AccountCard({ account }) {
         } else {
             setStartDateError("")
         }
-        console.log(`Expense form entries are ${isValid}`)
+        console.log(`Account form entries are ${isValid}`)
         return isValid
-    }
-
-    const toggleEditing = () => {
-        setIsEditing((previousValue) => !previousValue)
-    }
-
-    const handleDelete = async () => {
-        try {
-            await axios.delete(`${import.meta.env.VITE_SERVER_URL}/accounts/${account.id}`)
-            getData()
-        } catch (error) {
-            console.log(error)
-        }
     }
 
     const handleSave = async () => {
         if (!checkValidity()) {
             return
         }
-        const editedAccount = {
+        const newAccount = {
             name: title, 
             type: type, 
             balance: balance, 
@@ -98,65 +80,44 @@ function AccountCard({ account }) {
             createdAt: startDate
         }
         try {
-            await axios.put(`${import.meta.env.VITE_SERVER_URL}/accounts/${account.id}`, editedAccount)
-            toggleEditing()
+            await axios.post(`${import.meta.env.VITE_SERVER_URL}/accounts`, newAccount)
+            hideForm()
         } catch (error) {
             console.log(error)
         }
     }
 
     return (
-        <div className="d-flex justify-content-center align-items-center border-bottom p-3">
-            <img src={Card} alt="" />
-            <div>
-                <div className="d-flex justify-content-end m-5">
-                    <Button variant="primary" size="sm" className="me-2" onClick={toggleEditing} hidden={isEditing}>
-                        <i className="bi bi-pencil me-1"></i>
-                        Edit
-                    </Button>
-                    <Button variant="danger" size="sm" onClick={handleDelete}>
-                        <i className="bi bi-trash me-1"></i>
-                        Delete
-                    </Button>
-                </div>
+        <div className="d-flex flex-column justify-content-center p-3">
                 <Row className='m-3'>
                     <FloatingLabel as={Col} controlId="floatingInput" label="Title" className="mb-3">
-                        <Form.Control type="text" placeholder="Enter title" value={title} onChange={handleOnChangeTitle} isInvalid={!!titleError} disabled={!isEditing}/>
+                        <Form.Control type="text" placeholder="Enter title" value={title} onChange={handleOnChangeTitle} isInvalid={!!titleError}/>
                         <Form.Control.Feedback type="invalid" className='text-start'>{titleError}</Form.Control.Feedback>
                     </FloatingLabel>
                     <FloatingLabel as={Col} controlId="floatingInput" label="Account Type" className="mb-3">
-                        <Form.Control type="text" placeholder="Enter Account Type" value={type} onChange={handleOnChangeType} isInvalid={!!typeError} disabled={!isEditing}/>
+                        <Form.Control type="text" placeholder="Enter Account Type" value={type} onChange={handleOnChangeType} isInvalid={!!typeError}/>
                         <Form.Control.Feedback type="invalid" className='text-start'>{typeError}</Form.Control.Feedback>
                     </FloatingLabel>
                 </Row>
                 <Row className='m-3'>
                     <FloatingLabel as={Col} controlId="floatingInput" label="Balance" className="mb-3">
-                        <Form.Control type="text" placeholder="Enter balance" value={balance} onChange={handleOnChangeBalance} isInvalid={!!balanceError} disabled={!isEditing}/>
+                        <Form.Control type="text" placeholder="Enter balance" value={balance} onChange={handleOnChangeBalance} isInvalid={!!balanceError}/>
                         <Form.Control.Feedback type="invalid" className='text-start'>{balanceError}</Form.Control.Feedback>
                     </FloatingLabel>
                     <FloatingLabel as={Col} controlId="floatingInput" label="Currency" className="mb-3">
-                        <Form.Control type="text" placeholder="Enter Currency" value={currency} onChange={handleOnChangeCurrency} isInvalid={!!currencyError} disabled={!isEditing}/>
+                        <Form.Control type="text" placeholder="Enter Currency" value={currency} onChange={handleOnChangeCurrency} isInvalid={!!currencyError}/>
                         <Form.Control.Feedback type="invalid" className='text-start'>{currencyError}</Form.Control.Feedback>
                     </FloatingLabel>
                     <FloatingLabel as={Col} controlId="floatingInput" label="Start Date" className="mb-3">
-                        <Form.Control type="date" value={startDate.split("T")[0]} onChange={handleOnChangeStartDate} isInvalid={!!startDateError} disabled={!isEditing}/>
+                        <Form.Control type="date" value={startDate.split("T")[0]} onChange={handleOnChangeStartDate} isInvalid={!!startDateError}/>
                         <Form.Control.Feedback type="invalid" className='text-start'>{startDateError}</Form.Control.Feedback>
                     </FloatingLabel>
                 </Row>
-                <div className="d-flex justify-content-end m-5">
-                    <Button variant="primary" size="sm" className="me-2" onClick={toggleEditing} hidden={!isEditing}>
-                        Cancel
-                    </Button>
-                    <Button variant="danger" size="sm" onClick={handleSave} hidden={!isEditing}>
-                        Save
-                    </Button>
-                </div>
-                <Button variant="primary" size="sm" className="me-2" hidden={isEditing}>
-                        Show Transactions
-                    </Button>
+                <Button variant="danger" size="sm" onClick={handleSave}>
+                    Save
+                </Button>
             </div>
-        </div>
     )
 }
 
-export default AccountCard
+export default AddAccountForm

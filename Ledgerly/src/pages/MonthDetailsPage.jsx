@@ -13,7 +13,7 @@ function MonthDetailsPage(props) {
      const monthOverview = monthOverviews.find(([month, transactions]) => month === params.yearMonth)
 
     return (
-        <div>
+        <div className="min-vh-100">
 
             <Stack direction='horizontal' className="align-items-center border-bottom py-3 my-2 text-info">
                 <div className="w-100">Date</div>

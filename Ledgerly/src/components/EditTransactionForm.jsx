@@ -182,7 +182,7 @@ function EditTransactionForm({ transaction, hideForm }) {
                 )}
                 <Form.Group as={Col} controlId="formBasicDate">
                     <FloatingLabel controlId="floatingInput" label="Date" className="mb-3">
-                        <Form.Control type="date" value={transaction.createdAt.split("T")[0]} onChange={handleOnChangeDate} isInvalid={!!dateError}/>
+                        <Form.Control type="date" value={date.split("T")[0]} onChange={handleOnChangeDate} isInvalid={!!dateError}/>
                         <Form.Control.Feedback type="invalid" className='text-start'>{dateError}</Form.Control.Feedback>
                     </FloatingLabel>
                 </Form.Group>

@@ -12,7 +12,9 @@ import { DataContext } from "../context/expenserevenue.context"
 
 function HomePage() {
 
-  const {expenses, revenues, monthOverviews, getData } = useContext(DataContext)
+  const {expenses, revenues, accounts, monthOverviews, getData } = useContext(DataContext)
+
+  console.log(accounts)
 
   const [showExpenseForm, setShowExpenseForm] = useState(false)
   const [showRevenueForm, setShowRevenueForm] = useState(false)
@@ -54,7 +56,7 @@ function HomePage() {
     )
   }
   return (
-    <div>
+    <div className="min-vh-100">
       <Button onClick={toggleExpenseForm} className="m-5" disabled={showRevenueForm}>Add Expense</Button>
       <Modal
         show={showExpenseForm}
@@ -99,8 +101,8 @@ function HomePage() {
       </Modal>
       {monthOverviews.map(([month, transactions], index) => {
         return (
-          <Link to={`/month-details/${month}`}>
-            <MonthlyCard key={transactions[0].id} month={month} transactions={transactions} />
+          <Link to={`/month-details/${month}`} key={transactions[0].id}>
+            <MonthlyCard month={month} transactions={transactions} />
           </Link>
         )
       })}
