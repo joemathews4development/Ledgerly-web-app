@@ -14,8 +14,6 @@ function HomePage() {
 
   const {expenses, revenues, accounts, monthOverviews, getData } = useContext(DataContext)
 
-  console.log(accounts)
-
   const [showExpenseForm, setShowExpenseForm] = useState(false)
   const [showRevenueForm, setShowRevenueForm] = useState(false)
 
