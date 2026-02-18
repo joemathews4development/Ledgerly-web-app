@@ -26,14 +26,27 @@ function MonthlyCard({month, transactions}) {
     const totalExpense = transactions.reduce((sum, transaction) => transaction.type === "expense" && sum + transaction.amount)
     const totalRevenue = transactions.reduce((sum, transaction) => transaction.type === "revenue" && sum + transaction.amount)
 
+    const formattedMonth = new Date(month + "-01").toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long"
+    })
+
     return (
         <div className="w-75 mx-auto">
-            <h1>{month}</h1>
+            <h1>{formattedMonth}</h1>
             <MonthlyTransactionsBar monthTransactions={transactions} />
             {transactions.slice(0, 5).map((transaction, index) => {
+                const formattedDate = new Date(transaction.createdAt).toLocaleString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    timeZone: "UTC"
+                })
                 return (
-                    <Stack direction='horizontal' className="align-items-center border-bottom py-3 my-2">
-                        <div className="w-100">{transaction.createdAt}</div>
+                    <Stack direction='horizontal' className="align-items-center border-bottom py-3 my-2" key={index}>
+                        <div className="w-100">{formattedDate}</div>
                         <div className="w-100">{transaction.title}</div>
                         <div className={`w-100 ${transaction.type === "expense" ? "text-danger" : "text-success"}`}>{transaction.amount}</div>
                     </Stack>

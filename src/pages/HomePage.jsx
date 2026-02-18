@@ -8,11 +8,12 @@ import Modal from "react-bootstrap/Modal"
 import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { DataContext } from "../context/expenserevenue.context"
+import Carousel from 'react-bootstrap/Carousel';
 
 
 function HomePage() {
 
-  const {expenses, revenues, accounts, monthOverviews, getData } = useContext(DataContext)
+  const { expenses, revenues, accounts, monthOverviews, getData } = useContext(DataContext)
 
   const [showExpenseForm, setShowExpenseForm] = useState(false)
   const [showRevenueForm, setShowRevenueForm] = useState(false)
@@ -88,7 +89,7 @@ function HomePage() {
         </Modal.Header>
 
         <Modal.Body>
-          <RevenueForm hideForm={toggleRevenueForm}/>
+          <RevenueForm hideForm={toggleRevenueForm} />
         </Modal.Body>
 
         <Modal.Footer>
@@ -97,13 +98,17 @@ function HomePage() {
           </Button>
         </Modal.Footer>
       </Modal>
-      {monthOverviews.map(([month, transactions], index) => {
-        return (
-          <Link to={`/month-details/${month}`} key={transactions[0].id}>
-            <MonthlyCard month={month} transactions={transactions} />
-          </Link>
-        )
-      })}
+      <Carousel interval={null} indicators={false}>
+        {monthOverviews.map(([month, transactions], index) => {
+          return (
+            <Carousel.Item key={transactions[0].id}>
+              <Link to={`/month-details/${month}`} className="text-reset text-decoration-none">
+                <MonthlyCard month={month} transactions={transactions} />
+              </Link>
+            </Carousel.Item>
+          )
+        })}
+      </Carousel>
     </div>
   )
 }

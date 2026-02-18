@@ -54,7 +54,7 @@ function DataWrapper(props) {
         }, {})
         // Sort within each month
         Object.keys(groupedByMonth).forEach(month => {
-            groupedByMonth[month].sort((a, b) => new Date(a.date) - new Date(b.date))
+            groupedByMonth[month].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
         })
         const sortedMonths = Object.entries(groupedByMonth).sort((a, b) => b[0].localeCompare(a[0]))
         return sortedMonths
