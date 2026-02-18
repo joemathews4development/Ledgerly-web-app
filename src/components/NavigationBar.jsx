@@ -6,11 +6,11 @@ import { Link } from 'react-router-dom';
 function NavigationBar() {
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
-      <Container>
+      <Container fluid>
         <Navbar.Brand as={Link} to='/'>Home</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav>
+          <Nav className="me-auto">
             <Nav.Link as={Link} to='/accounts'>Accounts</Nav.Link>
             <Nav.Link as={Link} to='/about'>About</Nav.Link>
           </Nav>

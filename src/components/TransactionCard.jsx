@@ -5,7 +5,8 @@ import { useContext, useState } from "react";
 import { DataContext } from "../context/expenserevenue.context"
 import Modal from "react-bootstrap/Modal"
 import axios from 'axios';
-import EditTransactionForm from './EditTransactionForm';
+import EditTransactionForm from './Forms/EditTransactionForm';
+import DeleteConfirmation from './DeleteConfirmationModal';
 
 
 function TransactionCard({ transaction }) {
@@ -39,6 +40,16 @@ function TransactionCard({ transaction }) {
         minute: "2-digit",
         timeZone: "UTC"
     })
+
+    const deleteConfirmationMessage = (
+        <>
+            Are you sure you want to delete this transaction?
+            <br />
+            <br />
+            <strong>This action cannot be undone.</strong>
+        </>
+    )
+
     return (
         <Stack direction='horizontal' className="align-items-center border-bottom py-3">
             <div className="w-100">{formattedDate}</div>
@@ -48,7 +59,7 @@ function TransactionCard({ transaction }) {
             {isExpense && <div className="w-100">{transaction.vendor}</div>}
             {!isExpense && <div className="w-100">{transaction.payerName}</div>}
             <Stack direction='horizontal' className="align-items-center w-100 d-flex justify-content-center">
-                <Button variant="primary" size="sm" className="me-2" onClick={toggleTransactionForm}>
+                <Button variant="outline-primary" size="sm" className="me-2" onClick={toggleTransactionForm}>
                     <i className="bi bi-pencil me-1"></i>
                     Edit
                 </Button>
@@ -70,10 +81,7 @@ function TransactionCard({ transaction }) {
                         </Button>
                     </Modal.Footer>
                 </Modal>
-                <Button variant="danger" size="sm" onClick={handleDelete}>
-                    <i className="bi bi-trash me-1"></i>
-                    Delete
-                </Button>
+                <DeleteConfirmation onConfirm={handleDelete} content={deleteConfirmationMessage} />
             </Stack>
         </Stack>
     )

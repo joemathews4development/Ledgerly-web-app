@@ -6,8 +6,8 @@ import { Col, Row, Stack } from "react-bootstrap";
 import SearchBar from "../components/SearchBar";
 import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel'
-import MonthlyTransactionsBar from "../components/BarChart";
-import CollapsibleBarChart from "../components/CollapsibleBarChart";
+import MonthlyTransactionsBar from "../components/Chart/BarChart";
+import CollapsibleBarChart from "../components/Chart/CollapsibleBarChart";
 
 function MonthDetailsPage(props) {
 

@@ -1,5 +1,5 @@
 import { Button, Collapse } from "react-bootstrap";
-import MonthlyTransactionsBar from "../components/BarChart";
+import MonthlyTransactionsBar from "./BarChart";
 import { useState } from "react";
 
 function CollapsibleBarChart({ transactions }) {

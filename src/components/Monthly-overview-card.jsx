@@ -1,8 +1,8 @@
 import { Doughnut } from 'react-chartjs-2';
-import DonutChart from './BarChart';
-import MonthlyTransactionsBar from './BarChart';
+import DonutChart from './Chart/BarChart';
+import MonthlyTransactionsBar from './Chart/BarChart';
 import Stack from 'react-bootstrap/Stack'
-import MonthlyTransactionsDonut from './DonutChart';
+import MonthlyTransactionsDonut from './Chart/DonutChart';
 
 function MonthlyCard({month, transactions}) {
     const chartData = {

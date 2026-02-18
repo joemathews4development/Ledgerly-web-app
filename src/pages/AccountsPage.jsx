@@ -3,7 +3,7 @@ import { DataContext } from "../context/expenserevenue.context"
 import AccountCard from "../components/AccountCard"
 import Button from 'react-bootstrap/Button';
 import Modal from "react-bootstrap/Modal"
-import AddAccountForm from "../components/AddAccountForm";
+import AddAccountForm from "../components/Forms/AddAccountForm";
 
 
 function AccountsPage() {

@@ -7,12 +7,15 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button'
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import DeleteConfirmation from "./DeleteConfirmationModal";
 
 
 function AccountCard({ account }) {
 
     const { getData } = useContext(DataContext)
+
+    const navigate = useNavigate()
 
     const [title, setTitle] = useState(account.name)
     const [type, setType] = useState(account.type)
@@ -82,6 +85,7 @@ function AccountCard({ account }) {
         try {
             await axios.delete(`${import.meta.env.VITE_SERVER_URL}/accounts/${account.id}`)
             getData()
+            navigate("/accounts")
         } catch (error) {
             console.log(error)
         }
@@ -106,6 +110,18 @@ function AccountCard({ account }) {
         }
     }
 
+    const deleteConfirmationMessage = (
+        <>
+            Are you sure you want to delete this account?
+            <br />
+            <br />
+            This will delete all transactions linked to this account.
+            <br />
+            <br />
+            <strong>This action cannot be undone.</strong>
+        </>
+    )
+
     return (
         <div className="d-flex justify-content-center align-items-center border-bottom p-3">
             <img src={Card} alt="" style={{width: "25%", height: "10%"}} />
@@ -115,10 +131,7 @@ function AccountCard({ account }) {
                         <i className="bi bi-pencil me-1"></i>
                         Edit
                     </Button>
-                    <Button variant="danger" size="sm" onClick={handleDelete}>
-                        <i className="bi bi-trash me-1"></i>
-                        Delete
-                    </Button>
+                    <DeleteConfirmation onConfirm={handleDelete} content={deleteConfirmationMessage} />
                 </div>
                 <Row className='m-3'>
                     <FloatingLabel as={Col} controlId="floatingInput" label="Title" className="mb-3">

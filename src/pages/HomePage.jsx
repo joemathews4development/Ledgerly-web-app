@@ -2,8 +2,8 @@ import { useEffect, useState, useMemo } from "react"
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 import MonthlyCard from "../components/Monthly-overview-card";
-import ExpenseForm from "../components/ExpenseForm";
-import RevenueForm from "../components/RevenueForm";
+import ExpenseForm from "../components/Forms/ExpenseForm";
+import RevenueForm from "../components/Forms/RevenueForm";
 import Modal from "react-bootstrap/Modal"
 import { Link } from "react-router-dom";
 import { useContext } from "react";
