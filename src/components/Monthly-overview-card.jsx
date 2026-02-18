@@ -24,8 +24,10 @@ function MonthlyCard({month, transactions}) {
         ],
     }
 
-    const totalExpense = transactions.reduce((sum, transaction) => transaction.type === "expense" && sum + transaction.amount)
-    const totalRevenue = transactions.reduce((sum, transaction) => transaction.type === "revenue" && sum + transaction.amount)
+    const totalExpense = transactions.reduce((sum, transaction) => transaction.type === "expense" ? sum + Number(transaction.amount): sum, 0)
+    const totalRevenue = transactions.reduce((sum, transaction) => transaction.type === "revenue" ? sum + Number(transaction.amount): sum, 0)
+    const balance = totalRevenue - totalExpense
+    console.log(totalExpense, totalRevenue, balance)
 
     const formattedMonth = new Date(month + "-01").toLocaleDateString("en-US", {
         year: "numeric",
@@ -39,6 +41,14 @@ function MonthlyCard({month, transactions}) {
                 <div className='w-50'>
                     <h4>Expenses Chart</h4>
                     <MonthlyTransactionsDonut monthTransactions={transactions.filter((transaction) => transaction.type === "expense")} />
+                </div>
+                <div className='w-50'>
+                    <p className={`fs-2 ${balance < 0 ? "text-danger" : "text-success"} fw-bold`}>{balance}</p>
+                    <p>
+                        {balance < 0 
+                            ? `Expenses were higher than income this month. Consider reviewing your spending patterns.`
+                            : `Great job! You closed this month with a positive balance.`}
+                    </p>
                 </div>
                 <div className='w-50'>
                     <h4>Revenues Chart</h4>

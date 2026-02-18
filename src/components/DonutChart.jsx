@@ -30,7 +30,7 @@ function MonthlyTransactionsDonut({ monthTransactions }) {
     ]
 
     return (
-        <div style={{ width: "100%", height: 400, position: "relative" }}>
+        <div style={{ width: "100%", height:400, position: "relative" }}>
             <ResponsiveContainer>
                 <PieChart>
                     <Pie
@@ -55,12 +55,12 @@ function MonthlyTransactionsDonut({ monthTransactions }) {
             </ResponsiveContainer>
             <div
                 style={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                fontWeight: "bold",
-                fontSize: "20px"
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    fontWeight: "bold",
+                    fontSize: "20px"
                 }}
             >
                 ${totalAmount}

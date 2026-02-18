@@ -6,6 +6,8 @@ import { Col, Row, Stack } from "react-bootstrap";
 import SearchBar from "../components/SearchBar";
 import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel'
+import MonthlyTransactionsBar from "../components/BarChart";
+import CollapsibleBarChart from "../components/CollapsibleBarChart";
 
 function MonthDetailsPage(props) {
 
@@ -36,8 +38,15 @@ function MonthDetailsPage(props) {
 
     const sortingTypes = ["Newest first", "Oldest first"]
 
+    const formattedDate = new Date(monthOverview[0]).toLocaleString("en-US", {
+        year: "numeric",
+        month: "long"
+      })
+
     return (
         <div className="min-vh-100">
+            <h1 className="py-3">{formattedDate}</h1>
+            <CollapsibleBarChart transactions={filteredTransactions} className="py-3"/>
             <Row className="g-3 justify-content-around align-items-center mx-5">
                 <Col md={6}>
                     <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm}></SearchBar>

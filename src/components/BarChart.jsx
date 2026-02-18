@@ -13,20 +13,23 @@ function MonthlyTransactionsBar({ monthTransactions }) {
 
   const chartData = Object.values(
     monthTransactions.reduce((acc, tx) => {
-      const category = tx.category || "Other"
-
-      if (!acc[category]) {
-        acc[category] = {
-          category,
+      const date = tx.createdAt.split("T")[0]
+      const formattedDate = new Date(date).toLocaleString("en-US", {
+        month: "short",
+        day: "numeric"
+      })
+      if (!acc[formattedDate]) {
+        acc[formattedDate] = {
+          date: formattedDate,
           revenue: 0,
           expense: 0
         }
       }
 
       if (tx.type === "revenue") {
-        acc[category].revenue += Number(tx.amount)
+        acc[formattedDate].revenue += Number(tx.amount)
       } else {
-        acc[category].expense += Number(tx.amount)
+        acc[formattedDate].expense += Number(tx.amount)
       }
 
       return acc
@@ -39,7 +42,7 @@ function MonthlyTransactionsBar({ monthTransactions }) {
         <BarChart data={chartData}>
           <CartesianGrid strokeDasharray="3 3" />
 
-          <XAxis dataKey="category" />
+          <XAxis dataKey="date" />
 
           <YAxis />
 
