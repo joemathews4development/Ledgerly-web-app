@@ -2,7 +2,7 @@ import React from 'react'
 
 function AccountsPage() {
   return (
-    <div>AccountsPage</div>
+    <div className="min-vh-100">AccountsPage</div>
   )
 }
 
