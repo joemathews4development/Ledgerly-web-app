@@ -106,7 +106,7 @@ function MonthlyCard({ month, transactions }) {
                         })
                         return (
                             <ListGroup.Item key={transaction.id}>
-                                <Stack direction='horizontal' className="align-items-center py-3 my-2" key={index}>
+                                <Stack direction='horizontal' className="align-items-center py-2 my-2" key={index}>
                                     <div className="w-100">{formattedDate}</div>
                                     <div className="w-100">{transaction.title}</div>
                                     <div className={`w-100 ${transaction.type === "expense" ? "text-danger" : "text-success"}`}>{transaction.amount}</div>

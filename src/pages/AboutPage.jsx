@@ -1,15 +1,28 @@
 import { Container, Row, Col, Card, Button } from "react-bootstrap"
 import { Link } from "react-router-dom"
-import Logo from "../assets/Ledgerly.png"
+import { useContext } from "react"
+import { ThemeContext } from "../context/theme.context"
 
 function AboutPage() {
+
+  const { theme, logo } = useContext(ThemeContext)
+
+  const techStacks = [
+    { tech: "React", image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" },
+    { tech: "React Bootstrap", image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg"},
+    { tech: "Bootstrap Icons", image: "https://icons.getbootstrap.com/assets/img/icons-hero.png"},    
+    { tech: "Recharts", image: "https://avatars.githubusercontent.com/u/20414118?s=200&v=4" },
+    { tech: "Vite", image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vitejs/vitejs-original.svg" },
+    { tech: "JSON Server", image: "https://cdn-icons-png.flaticon.com/512/136/136443.png" }
+  ]
+
   return (
-    <div className="bg-light">
-      <div className="py-5 text-center bg-white shadow-sm">
+    <div>
+      <div className="py-5 text-center shadow-sm">
         <Container>
           <Row className="align-items-center">
             <Col md={4}>
-              <img src={Logo} alt="Logo" className="img-fluid" />
+              <img src={logo} alt="Logo" className="img-fluid"/>
             </Col>
             <Col md={8}>
               <p className="text-muted fs-5 my-3">
@@ -50,29 +63,40 @@ function AboutPage() {
                   </Card>
                 </Col>
               </Row>
-              <Button as={Link} to="/accounts" variant="primary" size="lg" className="mt-3 px-4 mt-5">
+              <Button as={Link} to="/accounts" variant="outline-primary" size="lg" className="mt-3 px-4 mt-5">
                 Get Started
               </Button>
             </Col>
           </Row>
         </Container>
       </div>
-      <div className="py-5">
+      <div className={`py-5 shadow-sm container-${theme}`}>
         <Container className="text-center">
           <h3 className="fw-bold mb-3">Built With Modern Tools</h3>
-          <p className="text-muted">
-            React • React Bootstrap • Recharts • Context API • Vite • json-server
-          </p>
+          <Row className="align-items-center justify-content-center">
+            {techStacks.map((techStack) => {
+              return (
+                <Col md={2}>
+                  <Card className="shadow-sm border-0">
+                    <Card.Body>
+                      <img src={techStack.image} alt="React" style={{ height: "60px", objectFit: "contain" }} />
+                      <p className="pt-2">{techStack.tech}</p>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              )
+            })}
+          </Row>
         </Container>
       </div>
-      <div className="py-5 bg-white">
+      <div className="py-5">
         <Container>
           <Row className="align-items-center">
 
             {/* Creator Image */}
             <Col md={4} className="text-center mb-4 mb-md-0">
               <div
-                className="rounded-circle bg-white shadow-sm d-inline-flex align-items-center justify-content-center"
+                className={`rounded-circle container-${theme} shadow-sm d-inline-flex align-items-center justify-content-center`}
                 style={{ width: "150px", height: "150px", fontSize: "3rem" }}
               >
                 👨‍💻
@@ -101,14 +125,14 @@ function AboutPage() {
                 <Button
                   variant="outline-primary"
                   className="me-2"
-                  href="#"
+                  href="https://www.linkedin.com/in/benjoemathews"
                 >
                   🌐 LinkedIn
                 </Button>
 
                 <Button
-                  variant="outline-dark"
-                  href="#"
+                  variant="outline-primary"
+                  href="https://github.com/joemathews4development/Ledgerly-web-app.git"
                 >
                   🐙 GitHub
                 </Button>

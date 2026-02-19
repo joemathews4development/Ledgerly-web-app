@@ -5,11 +5,14 @@ import './index.css'
 import App from './App.jsx'
 import {BrowserRouter} from "react-router-dom"
 import { DataWrapper } from './context/expenserevenue.context'
+import { ThemeWrapper } from './context/theme.context.jsx';
 
 createRoot(document.getElementById('root')).render(
   <DataWrapper>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <ThemeWrapper>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </ThemeWrapper>
   </DataWrapper>
 )

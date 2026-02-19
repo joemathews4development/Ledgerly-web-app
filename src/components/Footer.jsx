@@ -3,7 +3,10 @@ import { Container } from 'react-bootstrap'
 
 function Footer() {
   return (
-    <div className="bg-light py-2 text-center shadow-sm">
+    /**
+     * bg-body-tertiary to follow the theme colors from Bootstrap
+     */
+    <footer className="bg-body-tertiary py-2 text-center shadow-sm">
         <Container>
           <p className="text-muted mb-2">
             Designed to make personal finance simple and transparent.
@@ -12,7 +15,7 @@ function Footer() {
             © {new Date().getFullYear()} Ledgerly
           </small>
         </Container>
-      </div>
+      </footer>
   )
 }
 

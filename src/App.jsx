@@ -9,11 +9,16 @@ import NotFound from './pages/NotFoundPage'
 import MonthDetailsPage from './pages/MonthDetailsPage'
 import AccountTransactionsPage from './pages/AccountTransactions'
 import Footer from './components/Footer'
+import { useContext } from 'react'
+import { ThemeContext } from './context/theme.context'
 
 function App() {
 
+  const { theme } = useContext(ThemeContext)
+  console.log("here", theme)
+
   return (
-    <div className="d-flex flex-column vh-100">
+    <div data-bs-theme={theme} className={`d-flex flex-column vh-100 ${theme}`}>
       <NavigationBar className="flex-shrink-0" />
       <div className="flex-fill overflow-auto">
         <Routes>
@@ -28,7 +33,6 @@ function App() {
       <Footer className="flex-shrink-0" />
     </div>
   )
-
 }
 
 export default App

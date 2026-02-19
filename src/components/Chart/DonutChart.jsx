@@ -28,7 +28,7 @@ function MonthlyTransactionsDonut({ monthTransactions }) {
         "#f59e0b",
         "#8b5cf6",
         "#06b6d4",
-        "#043023",
+        "#c28e1f",
         "#b027eb"
     ]
 

@@ -56,3 +56,25 @@
   background-color: #047857;
   border-color: #047857;
 }
+
+.dark {
+  background-color: rgb(25, 25, 25);
+  color: white;
+  min-height: 100vh;
+}
+
+.light {
+  background-color: white;
+  color: rgb(25, 25, 25);
+  min-height: 100vh;
+}
+
+.container-dark {
+  background-color: #262A2F;
+  color: white;
+}
+
+.container-light {
+  background-color: #F7F8F9;
+  color: rgb(25, 25, 25);
+}
