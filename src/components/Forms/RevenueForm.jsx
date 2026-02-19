@@ -7,6 +7,9 @@ import { useState } from 'react';
 import axios from 'axios';
 
 function RevenueForm() {
+
+    const { accounts } = useContext(DataContext)
+
     const [title, setTitle] = useState("")
     const [amount, setAmount] = useState(0)
     const [category, setCategory] = useState("")
@@ -44,10 +47,15 @@ function RevenueForm() {
             receiptUrl: "", 
             createdAt: new Date(date)
         }
-        console.log("saving")
-        console.log(newRevenue)
+        const selectedAccount = accounts.find((account) => account.id === accountId)
+        const accountPatch = {
+            balance: selectedAccount.balance - amount
+        }
         try {
-            await axios.post(`${import.meta.env.VITE_SERVER_URL}/revenues`, newRevenue)
+            await Promise.all([
+                axios.post(`${import.meta.env.VITE_SERVER_URL}/revenues`, newRevenue),
+                axios.patch(`${import.meta.env.VITE_SERVER_URL}/accounts/${accountId}`, accountPatch)
+            ])
             hideForm()
         } catch (error) {
             console.log(error)

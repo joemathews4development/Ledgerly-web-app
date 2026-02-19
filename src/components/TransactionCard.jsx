@@ -11,7 +11,7 @@ import DeleteConfirmation from './DeleteConfirmationModal';
 
 function TransactionCard({ transaction }) {
 
-    const { getData } = useContext(DataContext)
+    const { getData, accounts } = useContext(DataContext)
     const [showEditTransactionForm, setShowEditTransactionForm] = useState(false)
 
     const isExpense = transaction.type === "expense"
@@ -19,7 +19,15 @@ function TransactionCard({ transaction }) {
     const handleDelete = async () => {
         const type = isExpense ? "expenses" : "revenues" 
         try {
-            await axios.delete(`${import.meta.env.VITE_SERVER_URL}/${type}/${transaction.id}`)
+            const selectedAccount = accounts.find((account) => account.id === transaction.accountId)
+            const accountPatch = {
+                balance: isExpense ? Number(selectedAccount.balance) + Number(transaction.amount)
+                                   : Number(selectedAccount.balance) - Number(transaction.amount)
+                }
+                await Promise.all([
+                    axios.delete(`${import.meta.env.VITE_SERVER_URL}/${type}/${transaction.id}`),
+                    axios.patch(`${import.meta.env.VITE_SERVER_URL}/accounts/${selectedAccount.id}`, accountPatch)
+                ])
             getData()
         } catch (error) {
             console.log(error)
@@ -27,9 +35,7 @@ function TransactionCard({ transaction }) {
     }
 
     const toggleTransactionForm = () => {
-        if (showEditTransactionForm) {
-            getData()
-        }
+        getData()
         setShowEditTransactionForm((previousValue) => !previousValue)
     }
     const formattedDate = new Date(transaction.createdAt).toLocaleString("en-US", {

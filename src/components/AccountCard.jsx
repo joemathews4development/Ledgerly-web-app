@@ -1,4 +1,4 @@
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { DataContext } from "../context/expenserevenue.context"
 import Card from "../assets/card.png"
 import Form from 'react-bootstrap/Form';
@@ -14,8 +14,13 @@ import DeleteConfirmation from "./DeleteConfirmationModal";
 function AccountCard({ account }) {
 
     const { getData } = useContext(DataContext)
+    console.log(account)
 
     const navigate = useNavigate()
+
+    useEffect(() => {
+        setBalance(account.balance)
+    }, [account])
 
     const [title, setTitle] = useState(account.name)
     const [type, setType] = useState(account.type)
@@ -104,6 +109,7 @@ function AccountCard({ account }) {
         }
         try {
             await axios.put(`${import.meta.env.VITE_SERVER_URL}/accounts/${account.id}`, editedAccount)
+            getData()
             toggleEditing()
         } catch (error) {
             console.log(error)

@@ -49,10 +49,15 @@ function ExpenseForm({hideForm}) {
             receiptUrl: "", 
             createdAt: new Date(date)
         }
-        console.log("saving")
-        console.log(newExpense)
+        const selectedAccount = accounts.find((account) => account.id === accountId)
+        const accountPatch = {
+            balance: selectedAccount.balance - amount
+        }
         try {
-            await axios.post(`${import.meta.env.VITE_SERVER_URL}/expenses`, newExpense)
+            await Promise.all([
+                axios.post(`${import.meta.env.VITE_SERVER_URL}/expenses`, newExpense),
+                axios.patch(`${import.meta.env.VITE_SERVER_URL}/accounts/${accountId}`, accountPatch)
+            ])
             hideForm()
         } catch (error) {
             console.log(error)

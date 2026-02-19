@@ -12,7 +12,7 @@ function EditTransactionForm({ transaction, hideForm }) {
 
     console.log(transaction)
 
-    const { accounts } = useContext(DataContext)
+    const { accounts, getData } = useContext(DataContext)
 
     const isExpense = transaction.type === "expense"
 
@@ -67,7 +67,21 @@ function EditTransactionForm({ transaction, hideForm }) {
         }
         const transactionType = isExpense ? "expenses" : "revenues"
         try {
-            await axios.put(`${import.meta.env.VITE_SERVER_URL}/${transactionType}/${transaction.id}`, newTransaction)
+            if (transaction.amount !== amount) {
+                const selectedAccount = accounts.find((account) => account.id === accountId)
+                const accountPatch = {
+                    balance: isExpense ? Number(selectedAccount.balance) + Number(transaction.amount) - Number(amount)
+                                       : Number(selectedAccount.balance) - Number(transaction.amount) + Number(amount)
+                }
+                console.log(accountPatch)
+                await Promise.all([
+                    axios.put(`${import.meta.env.VITE_SERVER_URL}/${transactionType}/${transaction.id}`, newTransaction),
+                    axios.patch(`${import.meta.env.VITE_SERVER_URL}/accounts/${accountId}`, accountPatch)
+                ])
+            } else {
+                await axios.put(`${import.meta.env.VITE_SERVER_URL}/${transactionType}/${transaction.id}`, newTransaction)
+            }
+            getData()
             hideForm()
         } catch (error) {
             console.log(error)

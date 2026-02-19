@@ -18,13 +18,6 @@ function HomePage() {
   const [showExpenseForm, setShowExpenseForm] = useState(false)
   const [showRevenueForm, setShowRevenueForm] = useState(false)
 
-  useEffect(() => {
-    const loadData = async () => {
-      getData()
-    }
-    loadData()
-  }, [])
-
   const toggleExpenseForm = () => {
     if (showExpenseForm) {
       getData()
@@ -39,21 +32,6 @@ function HomePage() {
     setShowRevenueForm((previousValue) => !previousValue)
   }
 
-
-  if (expenses === null || revenues === null || monthOverviews === null) {
-    return (
-      <Button variant="primary" disabled>
-        <Spinner
-          as="span"
-          animation="grow"
-          size="sm"
-          role="status"
-          aria-hidden="true"
-        />
-        Loading expenses and revenues...
-      </Button>
-    )
-  }
   return (
     <div className="min-vh-100">
       <Button onClick={toggleExpenseForm} className="m-5" disabled={showRevenueForm}>Add Expense</Button>

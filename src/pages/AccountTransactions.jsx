@@ -10,10 +10,11 @@ function AccountTransactionsPage() {
     const { accounts, monthOverviews } = useContext(DataContext)
 
     const account = accounts.find((account) => account.id === accountId)
+    console.log("Over here", account)
 
     const monthTransactions = monthOverviews.map(([month, transactions]) => {
       return {month: month, transactions: transactions.filter((transaction) => transaction.accountId === accountId)}
-    })
+    }).filter( month => month.transactions.length > 0)
 
     const formattedMonth = (month) => { 
       return new Date(month + "-01").toLocaleDateString("en-US", {
@@ -22,10 +23,17 @@ function AccountTransactionsPage() {
       }
     )}
 
+    
+
   return (
     <div className="min-vh-100">
       <AccountCard account={account}/>
-      {monthTransactions.map((monthTransaction) => {
+      {monthTransactions.length === 0 ? (
+        <p className="text-center text-muted py-5">
+            No entries found.
+        </p>
+      ) : 
+      monthTransactions.map((monthTransaction) => {
           return(
             <div className='py-5'>
                 <h2>{formattedMonth(monthTransaction.month)}</h2>
