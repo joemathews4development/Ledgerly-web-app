@@ -16,7 +16,10 @@ function MonthlyTransactionsDonut({ monthTransactions }) {
         }, {})
     )
 
-    const totalAmount = chartData.reduce((sum, category) => sum + category.total, 0)
+    const totalAmount = chartData.reduce((sum, category) => sum + category.total, 0).toLocaleString("en-US", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2
+    })
 
     const COLORS = [
         "#3b82f6",

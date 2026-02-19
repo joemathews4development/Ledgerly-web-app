@@ -9,15 +9,19 @@ import Button from 'react-bootstrap/Button'
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import DeleteConfirmation from "./DeleteConfirmationModal";
+import { ACCOUNT_TYPES as accountTpyes } from "./Constants"
 
 
-function AccountCard({ account }) {
+function AccountCard({ account, needTransactionsButton }) {
 
     const { getData } = useContext(DataContext)
     console.log(account)
 
     const navigate = useNavigate()
-
+    /**
+     * this is needed to update the balance as it is handled by state in this file, so changing the context will not affect here automatically.
+     *  So we track the change in account and change the state of balance
+     */
     useEffect(() => {
         setBalance(account.balance)
     }, [account])
@@ -45,7 +49,7 @@ function AccountCard({ account }) {
     const checkValidity = () => {
         let isValid = true
         if (title.trim() === "") {
-            setTitleError("Title is required")
+            setTitleError("Name is required")
             isValid = false
         } else {
             setTitleError("")
@@ -56,7 +60,7 @@ function AccountCard({ account }) {
         } else {
             setTypeError("")
         }
-        if (balance.trim() === "") {
+        if (balance === "") {
             setBalanceError("Balance is required")
             isValid = false
         } else {
@@ -84,6 +88,15 @@ function AccountCard({ account }) {
 
     const toggleEditing = () => {
         setIsEditing((previousValue) => !previousValue)
+    }
+
+    const handleCancel = () => {
+        setTitle(account.name)
+        setType(account.type)
+        setBalance(account.balance)
+        setCurrency(account.currency)
+        setStartDate(account.createdAt)
+        toggleEditing()
     }
 
     const handleDelete = async () => {
@@ -129,23 +142,30 @@ function AccountCard({ account }) {
     )
 
     return (
-        <div className="d-flex justify-content-center align-items-center border-bottom p-3">
-            <img src={Card} alt="" style={{width: "25%", height: "10%"}} />
+        <div className="d-flex justify-content-center align-items-center p-3">
+            <img src={accountTpyes.find((ty) => ty.value === type).image} alt="" style={{width: "25%", height: "10%"}} />
             <div>
                 <div className="d-flex justify-content-end m-5">
-                    <Button variant="primary" size="sm" className="me-2" onClick={toggleEditing} hidden={isEditing}>
+                    <Button variant="outline-primary" size="sm" className="me-2" onClick={toggleEditing} hidden={isEditing}>
                         <i className="bi bi-pencil me-1"></i>
                         Edit
                     </Button>
                     <DeleteConfirmation onConfirm={handleDelete} content={deleteConfirmationMessage} />
                 </div>
                 <Row className='m-3'>
-                    <FloatingLabel as={Col} controlId="floatingInput" label="Title" className="mb-3">
+                    <FloatingLabel as={Col} controlId="floatingInput" label="Name" className="mb-3">
                         <Form.Control type="text" placeholder="Enter title" value={title} onChange={handleOnChangeTitle} isInvalid={!!titleError} disabled={!isEditing}/>
                         <Form.Control.Feedback type="invalid" className='text-start'>{titleError}</Form.Control.Feedback>
                     </FloatingLabel>
                     <FloatingLabel as={Col} controlId="floatingInput" label="Account Type" className="mb-3">
-                        <Form.Control type="text" placeholder="Enter Account Type" value={type} onChange={handleOnChangeType} isInvalid={!!typeError} disabled={!isEditing}/>
+                        <Form.Select aria-label="Default select example" value={type} onChange={handleOnChangeType} isInvalid={!!typeError} disabled={!isEditing}>
+                            <option>Select account type</option>
+                            {accountTpyes.map((accountType) => {
+                                return (
+                                    <option value={accountType.value}>{accountType.label}</option>
+                                )
+                            })}
+                        </Form.Select>
                         <Form.Control.Feedback type="invalid" className='text-start'>{typeError}</Form.Control.Feedback>
                     </FloatingLabel>
                 </Row>
@@ -164,18 +184,18 @@ function AccountCard({ account }) {
                     </FloatingLabel>
                 </Row>
                 <div className="d-flex justify-content-end m-5">
-                    <Button variant="primary" size="sm" className="me-2" onClick={toggleEditing} hidden={!isEditing}>
+                    <Button variant="primary" size="sm" className="me-2" onClick={handleCancel} hidden={!isEditing}>
                         Cancel
                     </Button>
                     <Button variant="danger" size="sm" onClick={handleSave} hidden={!isEditing}>
                         Save
                     </Button>
                 </div>
-                <Link to={`/accounts/${account.id}/transactions`}>
-                    <Button variant="primary" size="sm" className="me-2" hidden={isEditing}>
+                {needTransactionsButton && <Link to={`/accounts/${account.id}/transactions`}>
+                    <Button variant="outline-primary" className="me-2" hidden={isEditing}>
                         Show Transactions
                     </Button>
-                </Link>
+                </Link>}
             </div>
         </div>
     )

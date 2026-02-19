@@ -57,7 +57,7 @@ function TransactionCard({ transaction }) {
     )
 
     return (
-        <Stack direction='horizontal' className="align-items-center border-bottom py-3">
+        <Stack direction='horizontal' className="align-items-center py-3">
             <div className="w-100">{formattedDate}</div>
             <div className="w-100">{transaction.title}</div>
             <div className={`w-100 ${isExpense ? "text-danger" : "text-success"}`}>{transaction.amount}</div>

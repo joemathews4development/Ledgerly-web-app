@@ -33,8 +33,16 @@ function HomePage() {
   }
 
   return (
-    <div className="min-vh-100">
-      <Button onClick={toggleExpenseForm} className="m-5" disabled={showRevenueForm}>Add Expense</Button>
+    <div>
+      <Button 
+        variant="outline-danger" 
+        onClick={toggleExpenseForm} 
+        className="m-5 animated-btn animated-btn-danger fw-semibold px-4" 
+        disabled={showRevenueForm}
+      >
+        <i className="bi bi-arrow-down-circle me-2"></i>
+        Add Expense
+      </Button>
       <Modal
         show={showExpenseForm}
         onHide={() => setShowExpenseForm(false)}
@@ -55,7 +63,15 @@ function HomePage() {
           </Button>
         </Modal.Footer>
       </Modal>
-      <Button onClick={toggleRevenueForm} className="m-5" disabled={showExpenseForm}>Add Revenue</Button>
+      <Button 
+        variant="outline-success" 
+        onClick={toggleRevenueForm} 
+        className="m-5 animated-btn animated-btn-success fw-semibold px-4" 
+        disabled={showExpenseForm}
+      >
+        <i className="bi bi-arrow-up-circle me-2"></i>
+        Add Revenue
+      </Button>
       <Modal
         show={showRevenueForm}
         onHide={() => setShowRevenueForm(false)}
@@ -80,9 +96,7 @@ function HomePage() {
         {monthOverviews.map(([month, transactions], index) => {
           return (
             <Carousel.Item key={transactions[0].id}>
-              <Link to={`/month-details/${month}`} className="text-reset text-decoration-none">
-                <MonthlyCard month={month} transactions={transactions} />
-              </Link>
+              <MonthlyCard month={month} transactions={transactions} />
             </Carousel.Item>
           )
         })}

@@ -4,6 +4,7 @@ import AccountCard from "../components/AccountCard"
 import Button from 'react-bootstrap/Button';
 import Modal from "react-bootstrap/Modal"
 import AddAccountForm from "../components/Forms/AddAccountForm";
+import { ListGroup } from "react-bootstrap";
 
 
 function AccountsPage() {
@@ -22,10 +23,11 @@ function AccountsPage() {
   }
 
   return (
-    <div className="min-vh-100">
+    <div>
       <h1>Accounts</h1>
-      <Button variant="primary" size="lg" className="me-2" onClick={toggleAddAccountForm}>
-          Create New Account
+      <Button size="lg" variant="outline-success" className="m-5 animated-btn animated-btn-success fw-semibold px-4" onClick={toggleAddAccountForm}>
+        <i className="bi bi-plus-circle me-2"></i>
+        Create New Account
       </Button>
       <Modal
         show={showAddAccountForm}
@@ -47,11 +49,15 @@ function AccountsPage() {
           </Button>
         </Modal.Footer>
       </Modal>
-      {accounts.map((account) => {
+      <ListGroup variant="flush">
+        {accounts.map((account) => {
           return (
-            <AccountCard account={account} key={account.id}/>
+            <ListGroup.Item key={account.id}>
+                <AccountCard account={account} needTransactionsButton={true}/>
+            </ListGroup.Item>
           )
       })}
+      </ListGroup>
     </div>
   )
 }

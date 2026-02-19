@@ -11,7 +11,7 @@ import { DataContext } from "../../context/expenserevenue.context"
 function ExpenseForm({hideForm}) {
 
     const { accounts } = useContext(DataContext)
-
+    
     const [title, setTitle] = useState("")
     const [amount, setAmount] = useState(0)
     const [category, setCategory] = useState("")

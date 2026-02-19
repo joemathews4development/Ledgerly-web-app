@@ -7,6 +7,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import axios from "axios";
+import { ACCOUNT_TYPES as accountTpyes } from "../Constants"
 
 function AddAccountForm({ hideForm }) {
 
@@ -31,7 +32,7 @@ function AddAccountForm({ hideForm }) {
     const checkValidity = () => {
         let isValid = true
         if (title.trim() === "") {
-            setTitleError("Title is required")
+            setTitleError("Name is required")
             isValid = false
         } else {
             setTitleError("")
@@ -90,12 +91,19 @@ function AddAccountForm({ hideForm }) {
     return (
         <div className="d-flex flex-column justify-content-center p-3">
                 <Row className='m-3'>
-                    <FloatingLabel as={Col} controlId="floatingInput" label="Title" className="mb-3">
-                        <Form.Control type="text" placeholder="Enter title" value={title} onChange={handleOnChangeTitle} isInvalid={!!titleError}/>
+                    <FloatingLabel as={Col} controlId="floatingInput" label="Name" className="mb-3">
+                        <Form.Control type="text" placeholder="Enter name" value={title} onChange={handleOnChangeTitle} isInvalid={!!titleError}/>
                         <Form.Control.Feedback type="invalid" className='text-start'>{titleError}</Form.Control.Feedback>
                     </FloatingLabel>
-                    <FloatingLabel as={Col} controlId="floatingInput" label="Account Type" className="mb-3">
-                        <Form.Control type="text" placeholder="Enter Account Type" value={type} onChange={handleOnChangeType} isInvalid={!!typeError}/>
+                    <FloatingLabel controlId="floatingInput" label="Account Type" className="mb-3">
+                        <Form.Select aria-label="Default select example" onChange={handleOnChangeType} isInvalid={!!typeError}>
+                            <option>Select account type</option>
+                            {accountTpyes.map((accountType) => {
+                                return (
+                                    <option value={accountType.value}>{accountType.label}</option>
+                                )
+                            })}
+                        </Form.Select>
                         <Form.Control.Feedback type="invalid" className='text-start'>{typeError}</Form.Control.Feedback>
                     </FloatingLabel>
                 </Row>

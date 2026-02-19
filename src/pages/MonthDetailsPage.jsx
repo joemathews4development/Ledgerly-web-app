@@ -2,7 +2,7 @@ import { useContext, useState, useMemo } from "react";
 import { DataContext } from "../context/expenserevenue.context"
 import { useParams } from "react-router-dom";
 import TransactionCard from "../components/TransactionCard";
-import { Col, Row, Stack } from "react-bootstrap";
+import { Card, Col, ListGroup, Row, Stack } from "react-bootstrap";
 import SearchBar from "../components/SearchBar";
 import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel'
@@ -22,10 +22,10 @@ function MonthDetailsPage(props) {
     const monthOverview = monthOverviews.find(([month, transactions]) => month === params.yearMonth)
 
     const filteredTransactions = monthOverview[1]
-            .filter(transaction => transaction.category === selectedCategory || selectedCategory === "All")
-            .filter(transaction => transaction.type === selectedType.toLowerCase() || selectedType === "All")
-            .filter(transaction => transaction.title.toLowerCase().includes(searchTerm.toLowerCase()))
-            .sort((a, b) => selectedSortingType === "Newest first" ? new Date(b.createdAt) - new Date(a.createdAt) : new Date(a.createdAt) - new Date(b.createdAt))
+        .filter(transaction => transaction.category === selectedCategory || selectedCategory === "All")
+        .filter(transaction => transaction.type === selectedType.toLowerCase() || selectedType === "All")
+        .filter(transaction => transaction.title.toLowerCase().includes(searchTerm.toLowerCase()))
+        .sort((a, b) => selectedSortingType === "Newest first" ? new Date(b.createdAt) - new Date(a.createdAt) : new Date(a.createdAt) - new Date(b.createdAt))
 
     const categories = useMemo(() => {
         return [
@@ -41,12 +41,12 @@ function MonthDetailsPage(props) {
     const formattedDate = new Date(monthOverview[0]).toLocaleString("en-US", {
         year: "numeric",
         month: "long"
-      })
+    })
 
     return (
-        <div className="min-vh-100">
+        <div>
             <h1 className="py-3">{formattedDate}</h1>
-            <CollapsibleBarChart transactions={filteredTransactions} className="py-3"/>
+            <CollapsibleBarChart transactions={filteredTransactions} className="py-3" />
             <Row className="g-3 justify-content-around align-items-center mx-5">
                 <Col md={6}>
                     <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm}></SearchBar>
@@ -60,7 +60,7 @@ function MonthDetailsPage(props) {
                             value={selectedSortingType}
                             onChange={(e) => setSelectedSortingType(e.target.value)}
                         >
-                            {sortingTypes.map((sortingType) => <option value={sortingType}>{sortingType}</option> )}
+                            {sortingTypes.map((sortingType) => <option value={sortingType}>{sortingType}</option>)}
                         </Form.Select>
                     </FloatingLabel>
                 </Col>
@@ -73,7 +73,7 @@ function MonthDetailsPage(props) {
                             value={selectedCategory}
                             onChange={(e) => setSelectedCategory(e.target.value)}
                         >
-                            {categories.map((category) => <option value={category}>{category}</option> )}
+                            {categories.map((category) => <option value={category}>{category}</option>)}
                         </Form.Select>
                     </FloatingLabel>
                 </Col>
@@ -86,26 +86,35 @@ function MonthDetailsPage(props) {
                             value={selectedType}
                             onChange={(e) => setSelectedType(e.target.value)}
                         >
-                            {types.map((type) => <option value={type}>{type}</option> )}
+                            {types.map((type) => <option value={type}>{type}</option>)}
                         </Form.Select>
                     </FloatingLabel>
                 </Col>
             </Row>
-            <Stack direction='horizontal' className="align-items-center border-bottom py-3 my-2 text-info">
-                <div className="w-100">Date</div>
-                <div className="w-100">Title</div>
-                <div className="w-100">Amount</div>
-                <div className="w-100">Category</div>
-                <div className="w-100">Vendor/Payer</div>
-                <div className="w-100"></div>
-            </Stack>
-            {filteredTransactions.length === 0 
-                ? <p style={{textAlign: "center"}}>No transactions found.</p> 
-                : filteredTransactions.map((transaction) => {
-                    return(
-                        <TransactionCard transaction={transaction}/>
-                    )
-            })}
+            <div className="mx-5 py-5">
+                <Card className="shadow-sm">
+                    <Card.Header className="fw-bold">
+                        <Stack direction='horizontal' className="align-items-center py-1 text-info">
+                            <div className="w-100">Date</div>
+                            <div className="w-100">Title</div>
+                            <div className="w-100">Amount</div>
+                            <div className="w-100">Category</div>
+                            <div className="w-100">Vendor/Payer</div>
+                            <div className="w-100"></div>
+                        </Stack>
+                    </Card.Header>
+                    <ListGroup variant="flush">
+                        {filteredTransactions.length === 0 ? <p style={{ textAlign: "center" }}>No transactions found.</p>
+                            : filteredTransactions.map((transaction) => {
+                                return (
+                                    <ListGroup.Item key={transaction.id}>
+                                        <TransactionCard transaction={transaction} />
+                                    </ListGroup.Item>
+                                )
+                            })}
+                    </ListGroup>
+                </Card>
+            </div>
         </div>
     )
 }
