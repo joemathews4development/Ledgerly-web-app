@@ -10,6 +10,7 @@ function DataWrapper(props) {
     const [revenues, setRevenues] = useState(null)
     const [accounts, setAccounts] = useState(null)
     const [isLoading, setIsLoading] = useState(true)
+    const [isError, setIsError] = useState(false)
 
     const handleSetExpenses = (expenses) => {
         setExpenses(expenses)
@@ -39,6 +40,8 @@ function DataWrapper(props) {
             setIsLoading(false)
         } catch (error) {
             console.log(error)
+            setIsLoading(false)
+            setIsError(true)
         }
     }
 
@@ -79,16 +82,31 @@ function DataWrapper(props) {
 
     if (isLoading) {
         return (
-            <Button variant="primary" disabled>
-                <Spinner
-                    as="span"
-                    animation="grow"
-                    size="sm"
-                    role="status"
-                    aria-hidden="true"
-                />
-                Loading expenses and revenues...
-            </Button>
+            <div className="d-flex flex-column justify-content-center align-items-center vh-100 bg-body">
+                <Spinner animation="grow" variant="success" style={{ width: "3rem", height: "3rem" }}/>
+                <h5 className="mt-4 text-body-secondary">
+                    Preparing your dashboard...
+                </h5>
+            </div>
+        )
+    }
+    if (isError) {
+        return (
+            <div className="d-flex justify-content-center align-items-center vh-100 bg-body">
+                <div className="p-5 rounded shadow bg-body-tertiary text-center">
+                    <div style={{ fontSize: "4rem" }}>💸</div>
+                    <h1 className="fw-bold mt-3">404 - Page Not Found</h1>
+                    <p className="text-body-secondary mt-3">
+                        The page you're looking for doesn’t exist.
+                    </p>
+                    <Button variant="outline-primary" className="mt-4" onClick={() => {
+                        setIsLoading(true)
+                        getData()
+                    }}>
+                        Try Again
+                    </Button>
+                </div>
+            </div>
         )
     }
     return (

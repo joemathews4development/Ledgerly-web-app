@@ -18,7 +18,7 @@ function RevenueForm() {
     const [accountId, setAccountId] = useState("")
     const [payer, setPayer] = useState("")
     const [note, setNote] = useState("")
-    const [date, setDate] = useState("")
+    const [date, setDate] = useState(new Date().toISOString())
 
     const [titleError, setTitleError] = useState("")
     const [amountError, setAmountError] = useState("")
@@ -140,7 +140,7 @@ function RevenueForm() {
                 </Form.Group>
                 <Form.Group as={Col} controlId="formBasicDate">
                     <FloatingLabel controlId="floatingInput" label="Date" className="mb-3">
-                        <Form.Control type="datetime-localate" placeholder="Add some notes" onChange={handleOnClickDate} isInvalid={!!dateError}/>
+                        <Form.Control type="datetime-local" value={getFormattedInputDate(date)} onChange={handleOnClickDate} isInvalid={!!dateError}/>
                         <Form.Control.Feedback type="invalid" className='text-start'>{dateError}</Form.Control.Feedback>
                     </FloatingLabel>
                 </Form.Group>

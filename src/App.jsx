@@ -5,7 +5,6 @@ import NavigationBar from './components/NavigationBar'
 import HomePage from './pages/HomePage'
 import AccountsPage from './pages/AccountsPage'
 import AboutPage from './pages/AboutPage'
-import NotFound from './pages/NotFoundPage'
 import MonthDetailsPage from './pages/MonthDetailsPage'
 import AccountTransactionsPage from './pages/AccountTransactions'
 import Footer from './components/Footer'
@@ -31,7 +30,6 @@ function App() {
           <Route path="/accounts/:accountId/transactions" element={<AccountTransactionsPage />} />
           <Route path="/month-details/:yearMonth" element={<MonthDetailsPage />} />
           <Route path="/about" element={<AboutPage />} />
-          <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
       <Footer className="flex-shrink-0" />
