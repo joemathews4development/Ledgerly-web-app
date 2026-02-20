@@ -5,7 +5,7 @@
 
 ## 🖼 App Logo
 
-![Ledgerly Logo](./src/assets/logo.png)
+![Ledgerly Logo](./src/assets/Logo-light.png)
 
 ---
 
