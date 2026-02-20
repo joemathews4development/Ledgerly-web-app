@@ -7,6 +7,7 @@ import Modal from "react-bootstrap/Modal"
 import axios from 'axios';
 import EditTransactionForm from './Forms/EditTransactionForm';
 import DeleteConfirmation from './DeleteConfirmationModal';
+import { displayableDateTime } from "./Constants"
 
 
 function TransactionCard({ transaction }) {
@@ -38,14 +39,6 @@ function TransactionCard({ transaction }) {
         getData()
         setShowEditTransactionForm((previousValue) => !previousValue)
     }
-    const formattedDate = new Date(transaction.createdAt).toLocaleString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-        timeZone: "UTC"
-    })
 
     const deleteConfirmationMessage = (
         <>
@@ -58,7 +51,7 @@ function TransactionCard({ transaction }) {
 
     return (
         <Stack direction='horizontal' className="align-items-center py-3">
-            <div className="w-100">{formattedDate}</div>
+            <div className="w-100">{displayableDateTime(transaction.createdAt)}</div>
             <div className="w-100">{transaction.title}</div>
             <div className={`w-100 ${isExpense ? "text-danger" : "text-success"}`}>{transaction.amount}</div>
             <div className="w-100">{transaction.category}</div>

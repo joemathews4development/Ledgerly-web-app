@@ -19,6 +19,10 @@ function App() {
 
   return (
     <div data-bs-theme={theme} className={`d-flex flex-column vh-100 ${theme}`}>
+      {/**
+       * flex-shrink-0 for navbar and footer to keep it fixed and inner div get flex-fill to fill the 
+       * remaining space and overflow-auto, so that it does not go after footer and it becomes scrollable.
+       */}
       <NavigationBar className="flex-shrink-0" />
       <div className="flex-fill overflow-auto">
         <Routes>

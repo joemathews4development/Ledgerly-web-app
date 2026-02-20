@@ -11,6 +11,9 @@ function NavigationBar() {
   const { handleToggleTheme, logo } = useContext(ThemeContext)
 
   return (
+    /**
+     * bg-body-tertiary to follow the theme colors from Bootstrap
+     */
     <Navbar expand="lg" className="bg-body-tertiary position-relative">
       <Container fluid>
         <Navbar.Brand as={Link} to='/'>Home</Navbar.Brand>

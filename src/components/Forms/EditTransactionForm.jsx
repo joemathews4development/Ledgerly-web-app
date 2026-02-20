@@ -7,6 +7,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useContext } from "react";
 import { DataContext } from "../../context/expenserevenue.context"
+import { getFormattedInputDate } from "../Constants"
 
 function EditTransactionForm({ transaction, hideForm }) {
 
@@ -40,7 +41,7 @@ function EditTransactionForm({ transaction, hideForm }) {
     const handleOnChangePayerName = (event) => setPayerName(event.target.value)
     const handleOnChangeNote = (event) => setNote(event.target.value)
     const handleOnChangeReceiptUrl = (event) => setReceiptUrl(event.target.value)
-    const handleOnChangeDate = (event) => setDate(event.target.value)
+    const handleOnChangeDate = (event) => setDate(new Date(event.target.value).toISOString())
 
     const handleOnSubmit = async (event) => {
         event.preventDefault()
@@ -48,20 +49,20 @@ function EditTransactionForm({ transaction, hideForm }) {
             return
         }
         const newTransaction = isExpense ? {
-            accountId: accountId, 
-            title: title, 
-            amount: amount, 
-            category: category, 
-            vendor: vendor, 
-            note: note, 
-            receiptUrl: receiptUrl, 
+            accountId: accountId,
+            title: title,
+            amount: amount,
+            category: category,
+            vendor: vendor,
+            note: note,
+            receiptUrl: receiptUrl,
             createdAt: new Date(date)
         } : {
-            accountId: accountId, 
-            title: title, 
-            amount: amount, 
-            category: category, 
-            payerName: payerName, 
+            accountId: accountId,
+            title: title,
+            amount: amount,
+            category: category,
+            payerName: payerName,
             note: note,
             createdAt: new Date(date)
         }
@@ -71,7 +72,7 @@ function EditTransactionForm({ transaction, hideForm }) {
                 const selectedAccount = accounts.find((account) => account.id === accountId)
                 const accountPatch = {
                     balance: isExpense ? Number(selectedAccount.balance) + Number(transaction.amount) - Number(amount)
-                                       : Number(selectedAccount.balance) - Number(transaction.amount) + Number(amount)
+                        : Number(selectedAccount.balance) - Number(transaction.amount) + Number(amount)
                 }
                 console.log(accountPatch)
                 await Promise.all([
@@ -129,17 +130,17 @@ function EditTransactionForm({ transaction, hideForm }) {
     }
 
     return (
-        <Form  className='m-5' onSubmit={handleOnSubmit}>
+        <Form className='m-5' onSubmit={handleOnSubmit}>
             <Row className='mb-3'>
                 <Form.Group as={Col} xs={8} controlId="formBasicTitle">
                     <FloatingLabel controlId="floatingInput" label="Title" className="mb-3">
-                        <Form.Control type="text" placeholder="Enter title" value={title} onChange={handleOnChangeTitle} isInvalid={!!titleError}/>
+                        <Form.Control type="text" placeholder="Enter title" value={title} onChange={handleOnChangeTitle} isInvalid={!!titleError} />
                         <Form.Control.Feedback type="invalid" className='text-start'>{titleError}</Form.Control.Feedback>
                     </FloatingLabel>
                 </Form.Group>
                 <Form.Group as={Col} controlId="formBasicAmount">
                     <FloatingLabel controlId="floatingInput" label="Amount" className="mb-3">
-                        <Form.Control type="number" placeholder="0" value={amount} onChange={handleOnChangeAmount} isInvalid={!!amountError}/>
+                        <Form.Control type="number" placeholder="0" value={amount} onChange={handleOnChangeAmount} isInvalid={!!amountError} />
                         <Form.Control.Feedback type="invalid" className='text-start'>{amountError}</Form.Control.Feedback>
                     </FloatingLabel>
                 </Form.Group>
@@ -147,7 +148,7 @@ function EditTransactionForm({ transaction, hideForm }) {
             <Row className='mb-3'>
                 <Form.Group as={Col} controlId="formBasicCategory">
                     <FloatingLabel controlId="floatingInput" label="Category" className="mb-3">
-                        <Form.Control type="text" placeholder="0" value={category} onChange={handleOnChangeCategory} isInvalid={!!categoryError}/>
+                        <Form.Control type="text" placeholder="0" value={category} onChange={handleOnChangeCategory} isInvalid={!!categoryError} />
                         <Form.Control.Feedback type="invalid" className='text-start'>{categoryError}</Form.Control.Feedback>
                     </FloatingLabel>
                 </Form.Group>
@@ -167,14 +168,14 @@ function EditTransactionForm({ transaction, hideForm }) {
                 {isExpense && (
                     <Form.Group as={Col} controlId="formBasicVendor">
                         <FloatingLabel controlId="floatingInput" label="Vendor" className="mb-3">
-                            <Form.Control type="text" placeholder="0" value={vendor} onChange={handleOnChangeVendor}/>
+                            <Form.Control type="text" placeholder="0" value={vendor} onChange={handleOnChangeVendor} />
                         </FloatingLabel>
                     </Form.Group>
                 )}
                 {!isExpense && (
                     <Form.Group as={Col} controlId="formBasicPayerName">
                         <FloatingLabel controlId="floatingInput" label="PayerName" className="mb-3">
-                            <Form.Control type="text" placeholder="0" value={payerName} onChange={handleOnChangePayerName}/>
+                            <Form.Control type="text" placeholder="0" value={payerName} onChange={handleOnChangePayerName} />
                         </FloatingLabel>
                     </Form.Group>
                 )}
@@ -182,21 +183,21 @@ function EditTransactionForm({ transaction, hideForm }) {
             <Row className='mb-3'>
                 <Form.Group as={Col} controlId="formBasicNote">
                     <FloatingLabel controlId="floatingInput" label="Note" className="mb-3">
-                        <Form.Control as="textarea" placeholder="Add some notes" value={note} style={{ height: `100px` }} onChange={handleOnChangeNote}/>
+                        <Form.Control as="textarea" placeholder="Add some notes" value={note} style={{ height: `100px` }} onChange={handleOnChangeNote} />
                     </FloatingLabel>
                 </Form.Group>
             </Row>
             <Row className='mb-3'>
-                {isExpense && (
+                {/* {isExpense && (
                     <Form.Group as={Col} xs={8} controlId="formBasicReceiptUrl">
-                    <FloatingLabel controlId="floatingInput" label="ReceiptUrl" className="mb-3">
-                        <Form.Control as="text" placeholder="Add receipt url" value={receiptUrl} onChange={handleOnChangeReceiptUrl}/>
-                    </FloatingLabel>
-                </Form.Group>
-                )}
+                        <FloatingLabel controlId="floatingInput" label="ReceiptUrl" className="mb-3">
+                            <Form.Control as="text" placeholder="Add receipt url" value={receiptUrl} onChange={handleOnChangeReceiptUrl} />
+                        </FloatingLabel>
+                    </Form.Group>
+                )} */}
                 <Form.Group as={Col} controlId="formBasicDate">
                     <FloatingLabel controlId="floatingInput" label="Date" className="mb-3">
-                        <Form.Control type="date" value={date.split("T")[0]} onChange={handleOnChangeDate} isInvalid={!!dateError}/>
+                        <Form.Control type="datetime-local" value={getFormattedInputDate(date)} onChange={handleOnChangeDate} isInvalid={!!dateError}/>
                         <Form.Control.Feedback type="invalid" className='text-start'>{dateError}</Form.Control.Feedback>
                     </FloatingLabel>
                 </Form.Group>

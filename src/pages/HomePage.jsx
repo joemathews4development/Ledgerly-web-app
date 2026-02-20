@@ -47,7 +47,7 @@ function HomePage() {
         show={showExpenseForm}
         onHide={() => setShowExpenseForm(false)}
         centered
-        size="lg"
+        size="xl"
       >
         <Modal.Header closeButton>
           <Modal.Title>Add Expense</Modal.Title>
@@ -76,7 +76,7 @@ function HomePage() {
         show={showRevenueForm}
         onHide={() => setShowRevenueForm(false)}
         centered
-        size="lg"
+        size="xl"
       >
         <Modal.Header closeButton>
           <Modal.Title>Add Revenue</Modal.Title>

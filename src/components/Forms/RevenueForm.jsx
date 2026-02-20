@@ -6,6 +6,7 @@ import Row from 'react-bootstrap/Row';
 import { useContext, useState } from 'react';
 import axios from 'axios';
 import { DataContext } from '../../context/expenserevenue.context';
+import { getFormattedInputDate } from "../Constants"
 
 function RevenueForm() {
 
@@ -31,7 +32,7 @@ function RevenueForm() {
     const handleOnChangeAccountId = (event) => setAccountId(event.target.value)
     const handleOnClickPayer = (event) => setPayer(event.target.value)
     const handleOnClickNote = (event) => setNote(event.target.value)
-    const handleOnClickDate = (event) => setDate(event.target.value)
+    const handleOnClickDate = (event) => setDate(new Date(event.target.value).toISOString())
 
     const handleOnSubmit = async (event) => {
         event.preventDefault()
@@ -132,14 +133,14 @@ function RevenueForm() {
                 </Form.Group>
             </Row>
             <Row className='mb-3'>
-                <Form.Group as={Col} xs={10} controlId="formBasicNote">
+                <Form.Group as={Col} xs={7} controlId="formBasicNote">
                     <FloatingLabel controlId="floatingInput" label="Note" className="mb-3">
                         <Form.Control as="textarea" placeholder="Add some notes" style={{ height: `100px` }} onChange={handleOnClickNote}/>
                     </FloatingLabel>
                 </Form.Group>
                 <Form.Group as={Col} controlId="formBasicDate">
                     <FloatingLabel controlId="floatingInput" label="Date" className="mb-3">
-                        <Form.Control type="date" onChange={handleOnClickDate} isInvalid={!!dateError}/>
+                        <Form.Control type="datetime-localate" placeholder="Add some notes" onChange={handleOnClickDate} isInvalid={!!dateError}/>
                         <Form.Control.Feedback type="invalid" className='text-start'>{dateError}</Form.Control.Feedback>
                     </FloatingLabel>
                 </Form.Group>

@@ -27,7 +27,7 @@ function AddAccountForm({ hideForm }) {
     const handleOnChangeType = (event) => setType(event.target.value)
     const handleOnChangeBalance = (event) => setBalance(event.target.value)
     const handleOnChangeCurrency = (event) => setCurrency(event.target.value)
-    const handleOnChangeStartDate = (event) => setStartDate(event.target.value)
+    const handleOnChangeStartDate = (event) => setStartDate(new Date(event.target.value).toISOString())
 
     const checkValidity = () => {
         let isValid = true
