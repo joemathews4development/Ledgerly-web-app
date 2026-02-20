@@ -146,7 +146,7 @@ function RevenueForm() {
                 </Form.Group>
             </Row>
 
-            <Button variant="primary" type="submit">
+            <Button variant="outline-primary" type="submit">
                 Add Revenue
             </Button>
         </Form>

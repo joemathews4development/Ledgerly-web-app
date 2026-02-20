@@ -202,7 +202,7 @@ function EditTransactionForm({ transaction, hideForm }) {
                     </FloatingLabel>
                 </Form.Group>
             </Row>
-            <Button variant="primary" type="submit">
+            <Button variant="outline-primary" type="submit">
                 Save {isExpense ? "Expense" : "Revenue"}
             </Button>
         </Form>

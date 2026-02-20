@@ -161,7 +161,7 @@ function ExpenseForm({hideForm}) {
                 </Form.Group>
             </Row>
 
-            <Button variant="primary" type="submit">
+            <Button variant="outline-primary" type="submit">
                 Add Expense
             </Button>
         </Form>

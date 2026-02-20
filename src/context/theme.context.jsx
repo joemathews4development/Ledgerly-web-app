@@ -1,4 +1,4 @@
-import { createContext, useState } from "react"
+import { createContext, useEffect, useState } from "react"
 import LogoDark from "../assets/Logo-dark.png"
 import LogoLight from "../assets/Logo-light.png"
 
@@ -8,6 +8,10 @@ function ThemeWrapper(props) {
 
     const [theme, setTheme] = useState("light")
     const [logo, setLogo] = useState(LogoLight)
+
+    useEffect(() => {
+        document.body.setAttribute("data-bs-theme", theme)
+    }, [theme])
 
     const handleToggleTheme = () => {
         setTheme(theme === "light" ? "dark" : "light")

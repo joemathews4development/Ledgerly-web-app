@@ -184,10 +184,10 @@ function AccountCard({ account, needTransactionsButton }) {
                     </FloatingLabel>
                 </Row>
                 <div className="d-flex justify-content-end m-5">
-                    <Button variant="primary" size="sm" className="me-2" onClick={handleCancel} hidden={!isEditing}>
+                    <Button variant="outline-primary" size="sm" className="me-2" onClick={handleCancel} hidden={!isEditing}>
                         Cancel
                     </Button>
-                    <Button variant="danger" size="sm" onClick={handleSave} hidden={!isEditing}>
+                    <Button variant="outline-primary" size="sm" onClick={handleSave} hidden={!isEditing}>
                         Save
                     </Button>
                 </div>
