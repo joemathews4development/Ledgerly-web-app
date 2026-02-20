@@ -68,13 +68,31 @@ function MonthlyCard({ month, transactions }) {
     return (
         <div className="w-75 mx-auto">
             <h1>{formattedMonth}</h1>
-            <div className='d-flex align-items-center justify-content-center py-5'>
-                <div className='w-50'>
+            <div className="d-flex flex-column flex-md-row align-items-center justify-content-center py-5">
+                {/* Expenses Chart - shown only on large screens */}
+                <div className="w-100 w-md-50 d-none d-lg-block text-center">
                     <h4>Expenses Chart</h4>
-                    <MonthlyTransactionsDonut monthTransactions={transactions.filter((transaction) => transaction.type === "expense")} />
+                    <MonthlyTransactionsDonut
+                        monthTransactions={transactions.filter(
+                            (transaction) => transaction.type === "expense"
+                        )}
+                    />
                 </div>
-                <div className='w-50'>
-                    <p className={`fs-2 ${isPositive ? "text-success" : "text-danger"} fw-bold`}>{balanceString}</p>
+                {/* Center Summary */}
+                <div className="w-100 w-md-50 text-center my-4 my-md-0">
+                    {/* Small screens */}
+                    <div className="d-lg-none mb-4">
+                        <p className="fs-5 text-danger fw-semibold">
+                            Total Expenses: {totalExpense}
+                        </p>
+                        <p className="fs-5 text-success fw-semibold">
+                            Total Revenue: {totalRevenue}
+                        </p>
+                    </div>
+                    {/* Balance */}
+                    <p className={`fs-2 ${isPositive ? "text-success" : "text-danger"} fw-bold`}>
+                        {balanceString}
+                    </p>
                     <div style={{ fontSize: "6rem" }}>
                         {getRandomItem(isPositive ? positiveEmojis : negativeEmojis)}
                     </div>
@@ -82,9 +100,14 @@ function MonthlyCard({ month, transactions }) {
                         {getRandomItem(isPositive ? positiveMessages : negativeMessages)}
                     </p>
                 </div>
-                <div className='w-50'>
+                {/* Revenues Chart - shown only on large screens */}
+                <div className="w-100 w-md-50 d-none d-lg-block text-center">
                     <h4>Revenues Chart</h4>
-                    <MonthlyTransactionsDonut monthTransactions={transactions.filter((transaction) => transaction.type === "revenue")} />
+                    <MonthlyTransactionsDonut
+                        monthTransactions={transactions.filter(
+                            (transaction) => transaction.type === "revenue"
+                        )}
+                    />
                 </div>
             </div>
             <Card className="shadow-sm">
