@@ -92,7 +92,11 @@ function HomePage() {
           </Button>
         </Modal.Footer>
       </Modal>
-      <Carousel interval={null} indicators={false}>
+      <Carousel 
+        interval={null} 
+        indicators={false}
+        wrap={false}
+      >
         {monthOverviews.map(([month, transactions], index) => {
           return (
             <Carousel.Item key={transactions[0].id}>
