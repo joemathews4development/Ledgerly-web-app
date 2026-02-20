@@ -26,26 +26,30 @@ The app focuses on clean UI, responsive design, and clear financial visualizatio
 ## 🚀 Tech Stack
 
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
-![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=FFD62E)
-![Bootstrap](https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white)
+
+![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white)
+
 ![React Bootstrap](https://img.shields.io/badge/React_Bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white)
+
+![Bootstrap 5](https://img.shields.io/badge/Bootstrap_5-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white)
+
+![Bootstrap Icons](https://img.shields.io/badge/Bootstrap_Icons-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white)
+
 ![Recharts](https://img.shields.io/badge/Recharts-FF6384?style=for-the-badge)
+
+![Context API](https://img.shields.io/badge/Context_API-000000?style=for-the-badge&logo=react&logoColor=61DAFB)
+
 ![Axios](https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge)
-![Context API](https://img.shields.io/badge/Context_API-000000?style=for-the-badge&logo=react)
+
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=FFD62E)
+
 ![json-server](https://img.shields.io/badge/json--server-000000?style=for-the-badge&logo=json&logoColor=white)
-- React  
-- React Router  
-- React Bootstrap  
-- Bootstrap 5  
-- Bootstrap Icons  
-- Recharts  
-- Context API  
-- Axios  
-- Vite  
-- json-server  
-- JavaScript (ES6+)  
-- HTML5  
-- CSS3  
+
+![JavaScript](https://img.shields.io/badge/JavaScript_ES6+-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white) 
 
 ---
 
