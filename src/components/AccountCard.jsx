@@ -1,21 +1,43 @@
+/**
+ * AccountCard.jsx
+ *
+ * Account display and editing component. Shows account details with ability to
+ * edit all account properties and optionally navigate to account transactions.
+ * Includes form validation and deletion capability with confirmation.
+ */
+
 import { useContext, useEffect, useState } from "react"
 import { DataContext } from "../context/expenserevenue.context"
-import Card from "../assets/card.png"
-import Form from 'react-bootstrap/Form';
+import Form from 'react-bootstrap/Form'
 import FloatingLabel from 'react-bootstrap/FloatingLabel'
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
-import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
-import DeleteConfirmation from "./DeleteConfirmationModal";
+import axios from "axios"
+import { Link, useNavigate } from "react-router-dom"
+import DeleteConfirmation from "./DeleteConfirmationModal"
 import { ACCOUNT_TYPES as accountTpyes } from "./Constants"
 
-
+/**
+ * AccountCard - Display and edit account information
+ *
+ * Features:
+ * - Display account details (name, type, balance, currency, created date)
+ * - Toggle inline editing mode with form validation
+ * - Edit all account properties with error handling
+ * - Delete account with confirmation (also deletes linked transactions)
+ * - Optional link to account-specific transactions
+ * - Real-time balance sync with account context updates
+ *
+ * @component
+ * @param {Object} props - Component props
+ * @param {Object} props.account - Account object to display
+ * @param {boolean} props.needTransactionsButton - Whether to show "Show Transactions" button
+ * @returns {React.ReactElement} Account card with edit and delete capabilities
+ */
 function AccountCard({ account, needTransactionsButton }) {
 
     const { getData } = useContext(DataContext)
-    console.log(account)
 
     const navigate = useNavigate()
     /**
@@ -25,27 +47,61 @@ function AccountCard({ account, needTransactionsButton }) {
     useEffect(() => {
         setBalance(account.balance)
     }, [account])
-
+    // Form field states
+    /** @type {[string, Function]} Account name/title */
     const [title, setTitle] = useState(account.name)
+
+    /** @type {[string, Function]} Account type selection */
     const [type, setType] = useState(account.type)
+
+    /** @type {[number|string, Function]} Current account balance - synced with context changes */
     const [balance, setBalance] = useState(account.balance)
+
+    /** @type {[string, Function]} Currency code */
     const [currency, setCurrency] = useState(account.currency)
+
+    /** @type {[string, Function]} Account creation date in ISO format */
     const [startDate, setStartDate] = useState(account.createdAt)
 
+    // State for form validation errors
+    /** @type {[string, Function]} Name field error message */
     const [titleError, setTitleError] = useState("")
+
+    /** @type {[string, Function]} Type field error message */
     const [typeError, setTypeError] = useState("")
+
+    /** @type {[string, Function]} Balance field error message */
     const [balanceError, setBalanceError] = useState("")
+
+    /** @type {[string, Function]} Currency field error message */
     const [currencyError, setCurrencyError] = useState("")
+
+    /** @type {[string, Function]} Start date field error message */
     const [startDateError, setStartDateError] = useState("")
 
+    /** @type {[boolean, Function]} Controls edit mode for the form */
     const [isEditing, setIsEditing] = useState(false)
 
+    /**
+     * this is needed to update the balance as it is handled by state in this file, so changing the context will not affect here automatically.
+     *  So we track the change in account and change the state of balance
+     */
+    useEffect(() => {
+        setBalance(account.balance)
+    }, [account])
+
+    // Form field change handlers
     const handleOnChangeTitle = (event) => setTitle(event.target.value)
     const handleOnChangeType = (event) => setType(event.target.value)
     const handleOnChangeBalance = (event) => setBalance(event.target.value)
     const handleOnChangeCurrency = (event) => setCurrency(event.target.value)
     const handleOnChangeStartDate = (event) => setStartDate(new Date(event.target.value).toISOString())
 
+    /**
+     * Validate all form fields and set error messages.
+     * Checks for required fields, valid balance, and dates not in the future.
+     * @returns {boolean} True if all fields are valid, false otherwise
+     */
     const checkValidity = () => {
         let isValid = true
         if (title.trim() === "") {
@@ -82,14 +138,19 @@ function AccountCard({ account, needTransactionsButton }) {
         } else {
             setStartDateError("")
         }
-        console.log(`Expense form entries are ${isValid}`)
         return isValid
     }
 
+    /**
+     * Toggle between edit and view modes.
+     */
     const toggleEditing = () => {
         setIsEditing((previousValue) => !previousValue)
     }
 
+    /**
+     * Reset all form fields to original account values and exit edit mode.
+     */
     const handleCancel = () => {
         setTitle(account.name)
         setType(account.type)
@@ -99,6 +160,12 @@ function AccountCard({ account, needTransactionsButton }) {
         toggleEditing()
     }
 
+    /**
+     * Delete the account and all associated transactions.
+     * Navigates to accounts page after successful deletion.
+     * @async
+     * @returns {Promise<void>}
+     */
     const handleDelete = async () => {
         try {
             await axios.delete(`${import.meta.env.VITE_SERVER_URL}/accounts/${account.id}`)
@@ -109,6 +176,12 @@ function AccountCard({ account, needTransactionsButton }) {
         }
     }
 
+    /**
+     * Save edited account data to the backend.
+     * Validates form before submission and refreshes context data on success.
+     * @async
+     * @returns {Promise<void>}
+     */
     const handleSave = async () => {
         if (!checkValidity()) {
             return
@@ -129,6 +202,7 @@ function AccountCard({ account, needTransactionsButton }) {
         }
     }
 
+    // Confirmation message displayed before deleting account
     const deleteConfirmationMessage = (
         <>
             Are you sure you want to delete this account?
@@ -143,8 +217,10 @@ function AccountCard({ account, needTransactionsButton }) {
 
     return (
         <div className="d-flex justify-content-center align-items-center p-3">
+            {/* Account Type Card Image */}
             <img src={accountTpyes.find((ty) => ty.value === type).image} alt="" style={{width: "25%", height: "10%"}} />
             <div>
+                {/* Edit and Delete Action Buttons - Top Right */}
                 <div className="d-flex justify-content-end m-5">
                     <Button variant="outline-primary" size="sm" className="me-2" onClick={toggleEditing} hidden={isEditing}>
                         <i className="bi bi-pencil me-1"></i>
@@ -152,6 +228,8 @@ function AccountCard({ account, needTransactionsButton }) {
                     </Button>
                     <DeleteConfirmation onConfirm={handleDelete} content={deleteConfirmationMessage} />
                 </div>
+
+                {/* Form Fields Section - Name and Account Type */}
                 <Row className='m-3'>
                     <FloatingLabel as={Col} controlId="floatingInput" label="Name" className="mb-3">
                         <Form.Control type="text" placeholder="Enter title" value={title} onChange={handleOnChangeTitle} isInvalid={!!titleError} disabled={!isEditing}/>
@@ -169,6 +247,8 @@ function AccountCard({ account, needTransactionsButton }) {
                         <Form.Control.Feedback type="invalid" className='text-start'>{typeError}</Form.Control.Feedback>
                     </FloatingLabel>
                 </Row>
+
+                {/* Form Fields Section - Balance, Currency, and Start Date */}
                 <Row className='m-3'>
                     <FloatingLabel as={Col} controlId="floatingInput" label="Balance" className="mb-3">
                         <Form.Control type="text" placeholder="Enter balance" value={balance} onChange={handleOnChangeBalance} isInvalid={!!balanceError} disabled={!isEditing}/>
@@ -183,6 +263,8 @@ function AccountCard({ account, needTransactionsButton }) {
                         <Form.Control.Feedback type="invalid" className='text-start'>{startDateError}</Form.Control.Feedback>
                     </FloatingLabel>
                 </Row>
+
+                {/* Cancel and Save Action Buttons */}
                 <div className="d-flex justify-content-end m-5">
                     <Button variant="outline-primary" size="sm" className="me-2" onClick={handleCancel} hidden={!isEditing}>
                         Cancel
@@ -191,6 +273,8 @@ function AccountCard({ account, needTransactionsButton }) {
                         Save
                     </Button>
                 </div>
+
+                {/* Show Transactions Link - Conditional */}
                 {needTransactionsButton && <Link to={`/accounts/${account.id}/transactions`}>
                     <Button variant="outline-primary" className="me-2" hidden={isEditing}>
                         Show Transactions

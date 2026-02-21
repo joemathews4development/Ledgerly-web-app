@@ -9,10 +9,25 @@ import { useContext } from "react";
 import { DataContext } from "../../context/expenserevenue.context"
 import { getFormattedInputDate } from "../Constants"
 
+/**
+ * ExpenseForm
+ *
+ * Form used to create a new expense and update the associated account balance.
+ * This component is controlled and uses DataContext to read available accounts.
+ *
+ * Props:
+ * - hideForm: function — callback to hide/close the parent form modal after successful submit
+ *
+ * Behavior:
+ * - Validates required fields locally before sending requests.
+ * - On submit, posts a new expense and patches the account balance in parallel.
+ */
 function ExpenseForm({hideForm}) {
 
+    // Context: available accounts (id, name, balance, ...)
     const { accounts } = useContext(DataContext)
     
+    // --- Controlled form fields ---
     const [title, setTitle] = useState("")
     const [amount, setAmount] = useState(0)
     const [category, setCategory] = useState("")
@@ -21,20 +36,28 @@ function ExpenseForm({hideForm}) {
     const [note, setNote] = useState("")
     const [date, setDate] = useState(new Date().toISOString())
 
+    // --- Validation error messages ---
     const [titleError, setTitleError] = useState("")
     const [amountError, setAmountError] = useState("")
     const [categoryError, setCategoryError] = useState("")
     const [accountIdError, setAccountIdError] = useState("")
     const [dateError, setDateError] = useState("")
 
+    // --- Field change handlers (simple setters) ---
     const handleOnChangeAmount = (event) => setAmount(event.target.value)
     const handleOnChangeCategory = (event) => setCategory(event.target.value)
     const handleOnChangeTitle = (event) => setTitle(event.target.value)
     const handleOnChangeAccountId = (event) => setAccountId(event.target.value)
     const handleOnChangeVendor = (event) => setVendor(event.target.value)
-    const handleOnChangeDate = (event) => setDate(event.target.value)
-    const handleOnChangeNote = (event) => setDate(new Date(event.target.value).toISOString())
+    const handleOnChangeNote = (event) => setNote(event.target.value)
+    const handleOnChangeDate = (event) => setDate(new Date(event.target.value).toISOString())
 
+    /**
+     * handleOnSubmit
+     * - Validate form inputs with `checkValidity`.
+     * - Create `newExpense` payload and patch the selected account's balance.
+     * - Uses `Promise.all` to perform both network requests in parallel.
+     */
     const handleOnSubmit = async (event) => {
         event.preventDefault()
         if (!checkValidity()) {
@@ -61,10 +84,16 @@ function ExpenseForm({hideForm}) {
             ])
             hideForm()
         } catch (error) {
+            // Network or server error — log for now. UI feedback could be added later.
             console.log(error)
         }
     }
 
+    /**
+     * checkValidity
+     * - Performs simple client-side validation and sets error messages.
+     * - Returns `true` when all validations pass.
+     */
     const checkValidity = () => {
         let isValid = true
         if (title.trim() === "") {
@@ -101,7 +130,6 @@ function ExpenseForm({hideForm}) {
         } else {
             setDateError("")
         }
-        console.log(`Expense form entries are ${isValid}`)
         return isValid
     }
 

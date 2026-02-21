@@ -9,14 +9,28 @@ import { useContext } from "react";
 import { DataContext } from "../../context/expenserevenue.context"
 import { getFormattedInputDate } from "../Constants"
 
+/**
+ * EditTransactionForm
+ *
+ * Form for editing an existing transaction (expense or revenue).
+ * Props:
+ * - transaction: object — the transaction to edit (contains id, type, amount, accountId, createdAt, etc.)
+ * - hideForm: function — callback to close the parent modal/form after save
+ *
+ * Notes:
+ * - The form is initialized from `transaction` and will send an update to the server
+ *   using `axios.put`. If the amount changes, the associated account balance is
+ *   patched accordingly. `getData` from `DataContext` is called after a successful save.
+ */
 function EditTransactionForm({ transaction, hideForm }) {
 
-    console.log(transaction)
-
+    // DataContext provides available `accounts` and a `getData` refetch helper.
     const { accounts, getData } = useContext(DataContext)
 
+    // Determine whether the transaction is an expense (affects which fields are shown)
     const isExpense = transaction.type === "expense"
 
+    // --- Controlled form fields initialized from the `transaction` prop ---
     const [title, setTitle] = useState(transaction.title)
     const [amount, setAmount] = useState(transaction.amount)
     const [category, setCategory] = useState(transaction.category)
@@ -74,7 +88,6 @@ function EditTransactionForm({ transaction, hideForm }) {
                     balance: isExpense ? Number(selectedAccount.balance) + Number(transaction.amount) - Number(amount)
                         : Number(selectedAccount.balance) - Number(transaction.amount) + Number(amount)
                 }
-                console.log(accountPatch)
                 await Promise.all([
                     axios.put(`${import.meta.env.VITE_SERVER_URL}/${transactionType}/${transaction.id}`, newTransaction),
                     axios.patch(`${import.meta.env.VITE_SERVER_URL}/accounts/${accountId}`, accountPatch)

@@ -1,32 +1,69 @@
-import { useContext, useState, useMemo } from "react";
+/**
+ * MonthDetailsPage.jsx
+ *
+ * Detailed view of transactions for a specific month. Provides comprehensive
+ * filtering and sorting capabilities to explore expenses and revenues by category,
+ * type, date, and search term. Includes visual chart summary and transaction listing.
+ */
+
+import { useContext, useState, useMemo } from "react"
 import { DataContext } from "../context/expenserevenue.context"
-import { useParams } from "react-router-dom";
-import TransactionCard from "../components/TransactionCard";
-import { Card, Col, ListGroup, Row, Stack } from "react-bootstrap";
-import SearchBar from "../components/SearchBar";
-import Form from 'react-bootstrap/Form';
+import { useParams } from "react-router-dom"
+import TransactionCard from "../components/TransactionCard"
+import { Card, Col, ListGroup, Row, Stack } from "react-bootstrap"
+import SearchBar from "../components/SearchBar"
+import Form from 'react-bootstrap/Form'
 import FloatingLabel from 'react-bootstrap/FloatingLabel'
-import MonthlyTransactionsBar from "../components/Chart/BarChart";
-import CollapsibleBarChart from "../components/Chart/CollapsibleBarChart";
+import CollapsibleBarChart from "../components/Chart/CollapsibleBarChart"
 
-function MonthDetailsPage(props) {
+/**
+ * MonthDetailsPage - Detailed month view with advanced transaction filtering
+ *
+ * Features:
+ * - Monthly transaction chart breakdown by category
+ * - Multi-criteria filtering (category, type, search term)
+ * - Sorting options (newest/oldest first)
+ * - Dynamic category extraction from transaction data
+ * - Responsive transaction list with details
+ *
+ * Route Params:
+ * - yearMonth (string): Format "YYYY-M" to identify the selected month
+ *
+ * @component
+ * @returns {React.ReactElement} Month detail page with filters, chart, and transaction list
+ */
+function MonthDetailsPage() {
 
+    // Retrieve monthly overview data from context
     const { monthOverviews } = useContext(DataContext)
-    const [searchTerm, setSearchTerm] = useState("");
+
+    /** @type {[string, Function]} Search term for filtering transactions by title */
+    const [searchTerm, setSearchTerm] = useState("")
+
+    /** @type {[string, Function]} Selected category filter (default: "All") */
     const [selectedCategory, setSelectedCategory] = useState("All")
+
+    /** @type {[string, Function]} Selected transaction type filter (default: "All") */
     const [selectedType, setSelectedType] = useState("All")
+
+    /** @type {[string, Function]} Selected sorting order (default: "Newest first") */
     const [selectedSortingType, setSelectedSortingType] = useState("Newest first")
 
+    // Extract month parameter from URL route
     const params = useParams()
 
+    // Find the month data matching the route parameter
     const monthOverview = monthOverviews.find(([month, transactions]) => month === params.yearMonth)
 
+    // Filter and sort transactions based on current filter selections
     const filteredTransactions = monthOverview[1]
         .filter(transaction => transaction.category === selectedCategory || selectedCategory === "All")
         .filter(transaction => transaction.type === selectedType.toLowerCase() || selectedType === "All")
         .filter(transaction => transaction.title.toLowerCase().includes(searchTerm.toLowerCase()))
         .sort((a, b) => selectedSortingType === "Newest first" ? new Date(b.createdAt) - new Date(a.createdAt) : new Date(a.createdAt) - new Date(b.createdAt))
 
+    // Extract unique categories from month's transactions, sorted alphabetically
+    // Memoized to prevent unnecessary recomputation on render
     const categories = useMemo(() => {
         return [
             "All",
@@ -34,10 +71,13 @@ function MonthDetailsPage(props) {
         ]
     }, [monthOverviews])
 
+    // Available transaction type options for filtering
     const types = ["All", "Expense", "Revenue"]
 
+    // Available sorting options for transaction ordering
     const sortingTypes = ["Newest first", "Oldest first"]
 
+    // Human-readable month label (e.g., "February 2026")
     const formattedDate = new Date(monthOverview[0]).toLocaleString("en-US", {
         year: "numeric",
         month: "long"
@@ -45,8 +85,13 @@ function MonthDetailsPage(props) {
 
     return (
         <div>
+            {/* Page Header with Month Label */}
             <h1 className="py-3">{formattedDate}</h1>
+
+            {/* Transaction Chart Summary */}
             <CollapsibleBarChart transactions={filteredTransactions} className="py-3" />
+
+            {/* Filter and Search Controls */}
             <Row className="g-3 justify-content-around align-items-center mx-5">
                 <Col md={6}>
                     <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm}></SearchBar>
@@ -91,6 +136,8 @@ function MonthDetailsPage(props) {
                     </FloatingLabel>
                 </Col>
             </Row>
+
+            {/* Transaction List Card */}
             <div className="mx-5 py-5">
                 <Card className="shadow-sm">
                     <Card.Header className="fw-bold">
@@ -104,7 +151,8 @@ function MonthDetailsPage(props) {
                         </Stack>
                     </Card.Header>
                     <ListGroup variant="flush">
-                        {filteredTransactions.length === 0 ? <p style={{ textAlign: "center" }}>No transactions found.</p>
+                        {filteredTransactions.length === 0 ? 
+                            <p style={{ textAlign: "center" }}>No transactions found.</p>
                             : filteredTransactions.map((transaction) => {
                                 return (
                                     <ListGroup.Item key={transaction.id}>

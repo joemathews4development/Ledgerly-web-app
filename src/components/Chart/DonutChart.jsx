@@ -1,7 +1,21 @@
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts"
 
+/**
+ * MonthlyTransactionsDonut
+ *
+ * Renders a donut chart summarizing transactions by category for a month.
+ *
+ * Props:
+ * - monthTransactions: Array — list of transaction objects for the month.
+ *   Each transaction is expected to include at least: `{ amount, category }`.
+ *
+ * Behavior:
+ * - Aggregates transactions by `category` (falls back to "Other").
+ * - Displays a colored donut (Recharts) and the numeric total in the center.
+ */
 function MonthlyTransactionsDonut({ monthTransactions }) {
 
+    // Aggregate transactions by category into { category, total } entries
     const chartData = Object.values(
         monthTransactions.reduce((acc, tx) => {
             const category = tx.category || "Other"
@@ -16,11 +30,13 @@ function MonthlyTransactionsDonut({ monthTransactions }) {
         }, {})
     )
 
+    // Total amount formatted for display in the center of the donut
     const totalAmount = chartData.reduce((sum, category) => sum + category.total, 0).toLocaleString("en-US", {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2
     })
 
+    // Palette used to color slices. Falls back by index if more categories than colors.
     const COLORS = [
         "#3b82f6",
         "#16a34a",
@@ -40,7 +56,7 @@ function MonthlyTransactionsDonut({ monthTransactions }) {
                         data={chartData}
                         dataKey="total"
                         nameKey="category"
-                        innerRadius={80}   // 👈 makes it donut
+                        innerRadius={80}   // makes the chart a donut
                         outerRadius={120}
                         paddingAngle={3}
                     >
@@ -52,10 +68,13 @@ function MonthlyTransactionsDonut({ monthTransactions }) {
                         ))}
                     </Pie>
 
+                    {/* Recharts helpers for hover tooltip and legend */}
                     <Tooltip />
                     <Legend />
                 </PieChart>
             </ResponsiveContainer>
+
+            {/* Center label showing total formatted amount */}
             <div
                 style={{
                     position: "absolute",

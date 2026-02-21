@@ -17,7 +17,7 @@ function App() {
   console.log("here", theme)
 
   return (
-    <div data-bs-theme={theme} className={`d-flex flex-column vh-100 ${theme}`}>
+    <div className={`d-flex flex-column vh-100 ${theme}`}>
       {/**
        * flex-shrink-0 for navbar and footer to keep it fixed and inner div get flex-fill to fill the 
        * remaining space and overflow-auto, so that it does not go after footer and it becomes scrollable.

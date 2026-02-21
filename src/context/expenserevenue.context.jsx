@@ -1,21 +1,77 @@
+/**
+ * expenserevenue.context.jsx
+ *
+ * Provides centralized data management for expenses, revenues, and accounts.
+ * Handles fetching data from the backend, managing loading/error states, and
+ * computing monthly overviews by combining transactions across both income and expenses.
+ */
+
 import { createContext, useState, useMemo, useEffect } from "react"
 import axios from "axios"
 import { Button, Spinner } from "react-bootstrap"
 
+/**
+ * DataContext - Context object for financial data management
+ * Provides expenses, revenues, accounts, and monthly overviews to descendant components.
+ *
+ * @typedef {Object} DataContextValue
+ * @property {Array|null} expenses - List of expense transactions
+ * @property {Array|null} revenues - List of revenue transactions
+ * @property {Array|null} accounts - List of user accounts
+ * @property {Array|null} monthOverviews - Monthly grouped and sorted transaction data
+ * @property {Function} getData - Refetch all data from the backend
+ * @property {Function} handleSetExpenses - Update expenses state
+ * @property {Function} handleSetRevenues - Update revenues state
+ */
 const DataContext = createContext()
 
+/**
+ * DataWrapper - Context provider component for financial data management
+ *
+ * Manages the lifecycle of financial data, including initial fetching, loading states,
+ * and error handling. Provides monthly transaction overviews by combining expenses and
+ * revenues grouped by month and sorted in descending order.
+ *
+ * @component
+ * @param {Object} props - Component props
+ * @param {React.ReactNode} props.children - Child components that consume the data context
+ * @returns {React.ReactElement} DataContext provider or loading/error UI
+ *
+ * @example
+ * // Usage in App.jsx
+ * <DataWrapper>
+ *   <YourApp />
+ * </DataWrapper>
+ */
 function DataWrapper(props) {
 
+    /** @type {[Array|null, Function]} Set of expense transactions */
     const [expenses, setExpenses] = useState(null)
+
+    /** @type {[Array|null, Function]} Set of revenue transactions */
     const [revenues, setRevenues] = useState(null)
+
+    /** @type {[Array|null, Function]} Set of user accounts */
     const [accounts, setAccounts] = useState(null)
+
+    /** @type {[boolean, Function]} Loading state for initial data fetch */
     const [isLoading, setIsLoading] = useState(true)
+
+    /** @type {[boolean, Function]} Error state when data fetch fails */
     const [isError, setIsError] = useState(false)
 
+    /**
+     * Update the expenses state with new data.
+     * @param {Array} expenses - Array of expense transaction objects
+     */
     const handleSetExpenses = (expenses) => {
         setExpenses(expenses)
     }
 
+    /**
+     * Update the revenues state with new data.
+     * @param {Array} revenues - Array of revenue transaction objects
+     */
     const handleSetRevenues = (revenues) => {
         setRevenues(revenues)
     }
@@ -24,6 +80,14 @@ function DataWrapper(props) {
         getData()
     }, [])
 
+    /**
+     * Fetch expenses, revenues, and accounts data from the backend.
+     * Sets loading state while fetching and handles errors gracefully.
+     * Uses Promise.all to fetch all datasets in parallel for performance.
+     *
+     * @async
+     * @returns {Promise<void>}
+     */
     const getData = async () => {
         try {
             const [expensesResponse, revenuesResponse, accountsResponse] = await Promise.all([
@@ -45,6 +109,14 @@ function DataWrapper(props) {
         }
     }
 
+    /**
+     * Combine expenses and revenues, then group by month in descending order.
+     * Adds a `type` property to each transaction ("expense" or "revenue") for classification.
+     *
+     * @param {Array} expensesData - Array of expense transactions
+     * @param {Array} revenuesData - Array of revenue transactions
+     * @returns {Array<[string, Array]>} Array of [monthKey, transactions] pairs sorted newest first
+     */
     const getMonthlyOverview = (expensesData, revenuesData) => {
         /**Combine both expenses and revenues into 1 array */
         const expensesWithType = expensesData.map(e => ({ ...e, type: "expense" }))
@@ -75,9 +147,15 @@ function DataWrapper(props) {
         return getMonthlyOverview(expenses, revenues)
     }, [expenses, revenues])
 
+    // Context value provided to all consuming components
     const passedContext = {
-        expenses, revenues, accounts, monthOverviews,
-        getData, handleSetExpenses, handleSetRevenues
+        expenses,
+        revenues,
+        accounts,
+        monthOverviews,
+        getData,
+        handleSetExpenses,
+        handleSetRevenues,
     }
 
     if (isLoading) {

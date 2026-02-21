@@ -1,6 +1,4 @@
-import { useContext, useState } from "react"
-import { DataContext } from "../../context/expenserevenue.context"
-import Card from "../../assets/card.png"
+import { useState } from "react"
 import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel'
 import Row from 'react-bootstrap/Row';
@@ -9,26 +7,44 @@ import Button from 'react-bootstrap/Button';
 import axios from "axios";
 import { ACCOUNT_TYPES as accountTpyes } from "../Constants"
 
+/**
+ * AddAccountForm
+ *
+ * Small form used for creating a new account.
+ * Props:
+ * - hideForm: function — callback used to close the parent modal after successful creation
+ *
+ * Validation:
+ * - Performs simple client-side checks for required fields and ensures start date is not in the future.
+ */
 function AddAccountForm({ hideForm }) {
 
+    // --- Controlled fields ---
     const [title, setTitle] = useState("")
     const [type, setType] = useState("")
     const [balance, setBalance] = useState("")
     const [currency, setCurrency] = useState("")
     const [startDate, setStartDate] = useState("")
 
+    // --- Validation errors ---
     const [titleError, setTitleError] = useState("")
     const [typeError, setTypeError] = useState("")
     const [balanceError, setBalanceError] = useState("")
     const [currencyError, setCurrencyError] = useState("")
     const [startDateError, setStartDateError] = useState("")
 
+    // --- Simple change handlers ---
     const handleOnChangeTitle = (event) => setTitle(event.target.value)
     const handleOnChangeType = (event) => setType(event.target.value)
     const handleOnChangeBalance = (event) => setBalance(event.target.value)
     const handleOnChangeCurrency = (event) => setCurrency(event.target.value)
     const handleOnChangeStartDate = (event) => setStartDate(new Date(event.target.value).toISOString())
 
+    /**
+     * checkValidity
+     * - Validates required fields and ensures `startDate` is not in the future.
+     * - Sets per-field error messages and returns a boolean indicating validity.
+     */
     const checkValidity = () => {
         let isValid = true
         if (title.trim() === "") {
@@ -69,6 +85,11 @@ function AddAccountForm({ hideForm }) {
         return isValid
     }
 
+    /**
+     * handleSave
+     * - Validates the form and posts the new account to the server.
+     * - On success, invokes `hideForm` to close the parent UI.
+     */
     const handleSave = async () => {
         if (!checkValidity()) {
             return
@@ -84,6 +105,7 @@ function AddAccountForm({ hideForm }) {
             await axios.post(`${import.meta.env.VITE_SERVER_URL}/accounts`, newAccount)
             hideForm()
         } catch (error) {
+            // TODO: surface a user-facing error message rather than console.log
             console.log(error)
         }
     }

@@ -1,23 +1,50 @@
+/**
+ * AboutPage.jsx
+ *
+ * About page showcasing the application's purpose, features, technology stack,
+ * and information about the creator. Includes marketing content, feature highlights,
+ * and links to creator's social profiles.
+ */
+
 import { Container, Row, Col, Card, Button } from "react-bootstrap"
 import { Link } from "react-router-dom"
 import { useContext } from "react"
 import { ThemeContext } from "../context/theme.context"
 
+/**
+ * AboutPage - Marketing and information page about the Ledgerly application
+ *
+ * Features:
+ * - Application overview and tagline
+ * - Feature highlights with icons (Monthly Insights, Account Management, Smart Filtering)
+ * - Technology stack showcase with logos
+ * - Creator information with social links
+ * - Theme-aware styling for dark/light mode support
+ *
+ * @component
+ * @returns {React.ReactElement} About page with application info, features, and creator bio
+ */
 function AboutPage() {
 
+  // Retrieve theme state and logo from context for dynamic UI styling
   const { theme, logo } = useContext(ThemeContext)
 
+  /** Array of technologies used in the application with their icon URLs */
   const techStacks = [
     { tech: "React", image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" },
     { tech: "React Bootstrap", image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg"},
     { tech: "Bootstrap Icons", image: "https://icons.getbootstrap.com/assets/img/icons-hero.png"},    
     { tech: "Recharts", image: "https://avatars.githubusercontent.com/u/20414118?s=200&v=4" },
     { tech: "Vite", image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vitejs/vitejs-original.svg" },
-    { tech: "JSON Server", image: "https://cdn-icons-png.flaticon.com/512/136/136443.png" }
+    { tech: "JSON Server", image: "https://cdn-icons-png.flaticon.com/512/136/136443.png" },
+    { tech: "HTML5", image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg"},
+    { tech: "CSS3", image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg"},
+     { tech: "Axios", image: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/axios/axios-plain.svg" }
   ]
 
   return (
     <div>
+      {/* Hero Section - App tagline and logo with feature highlights */}
       <div className="py-5 text-center shadow-sm">
         <Container>
           <Row className="align-items-center">
@@ -70,13 +97,14 @@ function AboutPage() {
           </Row>
         </Container>
       </div>
+      {/* Technology Stack Section - Displays tools and libraries used */}
       <div className={`py-5 shadow-sm container-${theme}`}>
         <Container className="text-center">
           <h3 className="fw-bold mb-3">Built With Modern Tools</h3>
           <Row className="align-items-center justify-content-center">
             {techStacks.map((techStack) => {
               return (
-                <Col md={2}>
+                <Col md={2} className="mb-4" key={techStack.tech}>
                   <Card className="shadow-sm border-0">
                     <Card.Body>
                       <img src={techStack.image} alt="React" style={{ height: "60px", objectFit: "contain" }} />
@@ -89,6 +117,7 @@ function AboutPage() {
           </Row>
         </Container>
       </div>
+      {/* Creator Section - Information about the developer and social links */}
       <div className="py-5">
         <Container>
           <Row className="align-items-center">

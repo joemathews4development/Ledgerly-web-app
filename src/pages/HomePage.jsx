@@ -1,23 +1,49 @@
-import { useEffect, useState, useMemo } from "react"
-import Button from 'react-bootstrap/Button';
-import Spinner from 'react-bootstrap/Spinner';
-import MonthlyCard from "../components/Monthly-overview-card";
-import ExpenseForm from "../components/Forms/ExpenseForm";
-import RevenueForm from "../components/Forms/RevenueForm";
+/**
+ * HomePage.jsx
+ *
+ * Main landing page of the application displaying monthly transaction overviews.
+ * Provides quick-access buttons to add new expenses and revenues via modals,
+ * with a carousel interface for browsing transactions month by month.
+ */
+
+import { useState } from "react"
+import Button from 'react-bootstrap/Button'
+import MonthlyCard from "../components/Monthly-overview-card"
+import ExpenseForm from "../components/Forms/ExpenseForm"
+import RevenueForm from "../components/Forms/RevenueForm"
 import Modal from "react-bootstrap/Modal"
-import { Link } from "react-router-dom";
-import { useContext } from "react";
+import { useContext } from "react"
 import { DataContext } from "../context/expenserevenue.context"
-import Carousel from 'react-bootstrap/Carousel';
+import Carousel from 'react-bootstrap/Carousel'
 
-
+/**
+ * HomePage - Main dashboard displaying monthly transaction overviews
+ *
+ * Features:
+ * - Carousel of monthly transaction summaries
+ * - Modal forms for adding new expenses and revenues
+ * - Mutually exclusive form toggles to prevent simultaneous editing
+ * - Auto-refresh data when forms are closed (submit or cancel)
+ *
+ * @component
+ * @returns {React.ReactElement} Dashboard page with transaction carousel and action modals
+ */
 function HomePage() {
 
-  const { expenses, revenues, accounts, monthOverviews, getData } = useContext(DataContext)
+  // Retrieve monthly transaction overviews and data refresh function from context
+  const { monthOverviews, getData } = useContext(DataContext)
 
+  /** @type {[boolean, Function]} Controls visibility of the Add Expense modal */
   const [showExpenseForm, setShowExpenseForm] = useState(false)
+
+  /** @type {[boolean, Function]} Controls visibility of the Add Revenue modal */
   const [showRevenueForm, setShowRevenueForm] = useState(false)
 
+  /**
+   * Toggle the Add Expense modal.
+   * When closing the form (showExpenseForm is true), refreshes data to display newly added expenses.
+   * Prevents the Revenue form from being open simultaneously.
+   */
   const toggleExpenseForm = () => {
     if (showExpenseForm) {
       getData()
@@ -25,6 +51,11 @@ function HomePage() {
     setShowExpenseForm((previousValue) => !previousValue)
   }
 
+  /**
+   * Toggle the Add Revenue modal.
+   * When closing the form (showRevenueForm is true), refreshes data to display newly added revenues.
+   * Prevents the Expense form from being open simultaneously.
+   */
   const toggleRevenueForm = () => {
     if (showRevenueForm) {
       getData()
@@ -34,6 +65,7 @@ function HomePage() {
 
   return (
     <div>
+      {/* Add Expense Button and Modal */}
       <Button 
         variant="outline-danger" 
         onClick={toggleExpenseForm} 
@@ -56,13 +88,14 @@ function HomePage() {
         <Modal.Body>
           <ExpenseForm hideForm={toggleExpenseForm} />
         </Modal.Body>
-
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowExpenseForm(false)}>
             Cancel
           </Button>
         </Modal.Footer>
       </Modal>
+
+      {/* Add Revenue Button and Modal */}
       <Button 
         variant="outline-success" 
         onClick={toggleRevenueForm} 
@@ -92,6 +125,8 @@ function HomePage() {
           </Button>
         </Modal.Footer>
       </Modal>
+
+      {/* Monthly Transaction Carousel - Browses transactions month by month */}
       <Carousel 
         interval={null} 
         indicators={false}

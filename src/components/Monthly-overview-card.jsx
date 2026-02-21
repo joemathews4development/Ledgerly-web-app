@@ -1,37 +1,55 @@
-import { Doughnut } from 'react-chartjs-2';
-import DonutChart from './Chart/BarChart';
-import MonthlyTransactionsBar from './Chart/BarChart';
+/**
+ * Monthly-overview-card.jsx
+ *
+ * Card component that displays a monthly financial summary including expense/revenue
+ * breakdown charts, balance status with motivational messages, and recent transactions.
+ * Provides a quick snapshot of monthly financial health with visual and emotional feedback.
+ */
+
 import Stack from 'react-bootstrap/Stack'
-import MonthlyTransactionsDonut from './Chart/DonutChart';
-import { Button, Card, ListGroup } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import MonthlyTransactionsDonut from './Chart/DonutChart'
+import { Button, Card, ListGroup } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 import { displayableDateTime } from "./Constants"
 
+/**
+ * MonthlyCard - Monthly financial overview with charts and balance summary
+ *
+ * Features:
+ * - Expense and revenue breakdown charts (donut charts)
+ * - Balance calculation with dynamic color coding (positive/negative)
+ * - Motivational messages and emojis based on financial outcome
+ * - Recent transactions preview (top 3)
+ * - Responsive layout (row on large screens, column on mobile)
+ * - Link to detailed month view for full transaction history
+ *
+ * @component
+ * @param {Object} props - Component props
+ * @param {string} props.month - Month identifier in format "YYYY-M"
+ * @param {Array<Object>} props.transactions - Array of transaction objects with type, amount, title, createdAt
+ * @returns {React.ReactElement} Monthly overview card component
+ *
+ * @example
+ * <MonthlyCard month="2026-2" transactions={februaryTransactions} />
+ */
 function MonthlyCard({ month, transactions }) {
-    const chartData = {
-        labels: ['Expenses', 'Revenues'],
-        datasets: [
-            {
-                label: 'Transactions Summary',
-                data: [2000, 3000],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(75, 192, 192, 1)',
-                ],
-                borderWidth: 1,
-            },
-        ],
-    }
-
+    
+    // Calculate total expenses from transactions
     const totalExpense = transactions.reduce((sum, transaction) => transaction.type === "expense" ? sum + Number(transaction.amount) : sum, 0)
+
+    // Calculate total revenues from transactions
     const totalRevenue = transactions.reduce((sum, transaction) => transaction.type === "revenue" ? sum + Number(transaction.amount) : sum, 0)
+
+    // Calculate net balance (revenue - expenses)
     const balance = (Number(totalRevenue) - Number(totalExpense))
+
+    // Determine if balance is positive for styling and message selection
     const isPositive = Number(balance) >= 0
+
+    // Format balance as localized currency string
     const balanceString = balance.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 2 })
+
+    // Motivational messages for positive balance outcomes
     const positiveMessages = [
         "Fantastic work! You closed this month with a positive balance.",
         "Income exceeded expenses this month — keep up the smart planning!",
@@ -42,6 +60,7 @@ function MonthlyCard({ month, transactions }) {
         "Another successful month with money flowing in."
     ]
 
+    // Motivational messages for negative balance outcomes (deficit)
     const negativeMessages = [
         "Expenses were higher than income this month. Consider reviewing your spending patterns.",
         "This month ended in a deficit. A few small adjustments could help next month.",
@@ -52,14 +71,23 @@ function MonthlyCard({ month, transactions }) {
         "It happens — use this month as insight for better planning."
     ]
 
+    // Emoji icons for positive balance outcomes
     const positiveEmojis = ["🎉", "💰", "🚀", "🔥", "🤑", "💹", "🥳"]
 
+    // Emoji icons for negative balance outcomes
     const negativeEmojis = ["⚠️", "📉", "😟", "💸", "🔴", "🧾", "⛔"]
 
+    /**
+     * Select a random item from an array.
+     * Used for varying motivational messages and emoji feedback.
+     * @param {Array} array - Array to select from
+     * @returns {*} Random element from the array
+     */
     const getRandomItem = (array) => {
         return array[Math.floor(Math.random() * array.length)]
     }
 
+    // Format month identifier into human-readable date (e.g., "February 2026")
     const formattedMonth = new Date(month + "-01").toLocaleDateString("en-US", {
         year: "numeric",
         month: "long"
@@ -68,9 +96,11 @@ function MonthlyCard({ month, transactions }) {
     return (
         <div className="w-75 mx-auto">
             <h1>{formattedMonth}</h1>
-            <div className="d-flex flex-column flex-md-row align-items-center justify-content-center py-5">
+            {/* This remains row on larger screens but on all other screens it becomes column to have better 
+                displays supporting responsiveness */}
+            <div className="d-flex flex-column flex-lg-row align-items-center justify-content-center py-5">
                 {/* Expenses Chart - shown only on large screens */}
-                <div className="w-100 w-md-50 d-none d-lg-block text-center">
+                <div className="w-100 w-md-50 text-center">
                     <h4>Expenses Chart</h4>
                     <MonthlyTransactionsDonut
                         monthTransactions={transactions.filter(
@@ -80,15 +110,6 @@ function MonthlyCard({ month, transactions }) {
                 </div>
                 {/* Center Summary */}
                 <div className="w-100 w-md-50 text-center my-4 my-md-0">
-                    {/* Small screens */}
-                    <div className="d-lg-none mb-4">
-                        <p className="fs-5 text-danger fw-semibold">
-                            Total Expenses: {totalExpense}
-                        </p>
-                        <p className="fs-5 text-success fw-semibold">
-                            Total Revenue: {totalRevenue}
-                        </p>
-                    </div>
                     {/* Balance */}
                     <p className={`fs-2 ${isPositive ? "text-success" : "text-danger"} fw-bold`}>
                         {balanceString}
@@ -101,7 +122,7 @@ function MonthlyCard({ month, transactions }) {
                     </p>
                 </div>
                 {/* Revenues Chart - shown only on large screens */}
-                <div className="w-100 w-md-50 d-none d-lg-block text-center">
+                <div className="w-100 w-md-50 text-center">
                     <h4>Revenues Chart</h4>
                     <MonthlyTransactionsDonut
                         monthTransactions={transactions.filter(
@@ -110,7 +131,7 @@ function MonthlyCard({ month, transactions }) {
                     />
                 </div>
             </div>
-            <Card className="shadow-sm">
+            <Card className="shadow-sm mb-5">
                 <Card.Header className="fw-bold">
                     <Stack direction='horizontal' className="align-items-center my-2 text-info">
                         <div className="w-100">Date</div>
@@ -139,18 +160,6 @@ function MonthlyCard({ month, transactions }) {
             </Card>
         </div>
     )
-
-    function getExpensesSum() {
-        return transactions.reduce((sum, transaction) => transaction.type === "expense" && sum + transaction.amount, 0)
-    }
-
-    function getRevenuesSum() {
-        return this.transactions.reduce((sum, transaction) => transaction.type === "revenue" && sum + transaction.amount, 0)
-    }
-
-    function getTotal() {
-        return getRevenuesSum() - getRevenuesSum()
-    }
 
 }
 

@@ -1,31 +1,85 @@
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
+/**
+ * RevenueForm.jsx
+ *
+ * Form component for creating new revenue transactions. Handles revenue entry
+ * with account selection, payer information, and automatic account balance updates.
+ * Includes form validation and error handling.
+ */
+
+import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
 import FloatingLabel from 'react-bootstrap/FloatingLabel'
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
-import { useContext, useState } from 'react';
-import axios from 'axios';
-import { DataContext } from '../../context/expenserevenue.context';
+import Col from 'react-bootstrap/Col'
+import Row from 'react-bootstrap/Row'
+import { useContext, useState } from 'react'
+import axios from 'axios'
+import { DataContext } from '../../context/expenserevenue.context'
 import { getFormattedInputDate } from "../Constants"
 
-function RevenueForm() {
+/**
+ * RevenueForm - Form for creating new revenue transactions
+ *
+ * Features:
+ * - Revenue entry with title, amount, category, and payer information
+ * - Account selection for crediting the revenue
+ * - Optional note/description and custom transaction date
+ * - Form validation with error messages for all required fields
+ * - Automatic account balance update when revenue is added
+ * - Date validation to prevent future dates
+ *
+ * @component
+ * @param {Object} props - Component props
+ * @param {Function} props.hideForm - Callback to hide/close the form after submission
+ * @returns {React.ReactElement} Revenue entry form
+ *
+ * @example
+ * const [showForm, setShowForm] = useState(false);
+ * <RevenueForm hideForm={() => setShowForm(false)} />
+ */
+function RevenueForm({ hideForm }) {
 
+    // Retrieve accounts list from context
     const { accounts } = useContext(DataContext)
 
+    // Form field states
+    /** @type {[string, Function]} Revenue title/description */
     const [title, setTitle] = useState("")
+
+    /** @type {[number, Function]} Revenue amount */
     const [amount, setAmount] = useState(0)
+
+    /** @type {[string, Function]} Revenue category */
     const [category, setCategory] = useState("")
+
+    /** @type {[string, Function]} Account ID to credit the revenue to */
     const [accountId, setAccountId] = useState("")
+
+    /** @type {[string, Function]} Name of the payer/source */
     const [payer, setPayer] = useState("")
+
+    /** @type {[string, Function]} Optional notes about the revenue */
     const [note, setNote] = useState("")
+
+    /** @type {[string, Function]} Transaction date in ISO format */
     const [date, setDate] = useState(new Date().toISOString())
 
+    // Form validation error states
+    /** @type {[string, Function]} Title field error message */
     const [titleError, setTitleError] = useState("")
+
+    /** @type {[string, Function]} Amount field error message */
     const [amountError, setAmountError] = useState("")
+
+    /** @type {[string, Function]} Category field error message */
     const [categoryError, setCategoryError] = useState("")
+
+    /** @type {[string, Function]} Account ID field error message */
     const [accountIdError, setAccountIdError] = useState("")
+
+    /** @type {[string, Function]} Date field error message */
     const [dateError, setDateError] = useState("")
 
+    // Form field change handlers
     const handleOnClickTitle = (event) => setTitle(event.target.value)
     const handleOnClickAmount = (event) => setAmount(event.target.value)
     const handleOnClickCategory = (event) => setCategory(event.target.value)
@@ -34,6 +88,13 @@ function RevenueForm() {
     const handleOnClickNote = (event) => setNote(event.target.value)
     const handleOnClickDate = (event) => setDate(new Date(event.target.value).toISOString())
 
+    /**
+     * Handle form submission. Validates form, creates revenue record, and updates account balance.
+     * Makes parallel API requests for revenue creation and account balance update.
+     * @async
+     * @param {Event} event - Form submit event
+     * @returns {Promise<void>}
+     */
     const handleOnSubmit = async (event) => {
         event.preventDefault()
         if (!checkValidity()) {
@@ -64,6 +125,11 @@ function RevenueForm() {
         }
     }
 
+    /**
+     * Validate all form fields and set error messages.
+     * Checks for required fields, positive amount, and dates not in the future.
+     * @returns {boolean} True if all fields are valid, false otherwise
+     */
     const checkValidity = () => {
         let isValid = true
         if (title.trim() === "") {
@@ -91,7 +157,8 @@ function RevenueForm() {
     }
 
     return (
-        <Form  className='m-5' onSubmit={handleOnSubmit}>
+        <Form className='m-5' onSubmit={handleOnSubmit}>
+            {/* Title and Amount Fields */}
             <Row className='mb-3'>
                 <Form.Group as={Col} xs={10} controlId="formBasicTitle">
                     <FloatingLabel controlId="floatingInput" label="Title" className="mb-3">
@@ -106,6 +173,8 @@ function RevenueForm() {
                     </FloatingLabel>
                 </Form.Group>
             </Row>
+
+            {/* Category, Account, and Payer Fields */}
             <Row className='mb-3'>
                 <Form.Group as={Col} controlId="formBasicCategory">
                     <FloatingLabel controlId="floatingInput" label="Category" className="mb-3">
@@ -132,6 +201,8 @@ function RevenueForm() {
                     </FloatingLabel>
                 </Form.Group>
             </Row>
+
+            {/* Notes and Date Fields */}
             <Row className='mb-3'>
                 <Form.Group as={Col} xs={7} controlId="formBasicNote">
                     <FloatingLabel controlId="floatingInput" label="Note" className="mb-3">
@@ -146,6 +217,7 @@ function RevenueForm() {
                 </Form.Group>
             </Row>
 
+            {/* Submit Button */}
             <Button variant="outline-primary" type="submit">
                 Add Revenue
             </Button>
