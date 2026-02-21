@@ -55,15 +55,23 @@ function MonthDetailsPage() {
     // Find the month data matching the route parameter
     const monthOverview = monthOverviews.find(([month, transactions]) => month === params.yearMonth)
 
-    // Filter and sort transactions based on current filter selections
+    // Filter and sort transactions based on current filter and search selections
     const filteredTransactions = monthOverview[1]
         .filter(transaction => transaction.category === selectedCategory || selectedCategory === "All")
         .filter(transaction => transaction.type === selectedType.toLowerCase() || selectedType === "All")
         .filter(transaction => transaction.title.toLowerCase().includes(searchTerm.toLowerCase()))
         .sort((a, b) => selectedSortingType === "Newest first" ? new Date(b.createdAt) - new Date(a.createdAt) : new Date(a.createdAt) - new Date(b.createdAt))
 
-    // Extract unique categories from month's transactions, sorted alphabetically
-    // Memoized to prevent unnecessary recomputation on render
+    /**
+     * First it maps over the transactions to extract the category of each transaction,
+     * then it filters out any falsy values (like null or undefined) to ensure only valid 
+     * categories are included. Next, it creates a Set from the filtered categories to 
+     * eliminate duplicates, and finally converts the Set back into an array and sorts it alphabetically.
+     * The resulting array of unique, sorted categories is then combined with the "All" 
+     * option at the beginning to create the final list of categories for filtering.
+     * The useMemo hook ensures that this computation only runs when the monthOverviews 
+     * data changes, optimizing performance by avoiding unnecessary recalculations on every render.
+     */
     const categories = useMemo(() => {
         return [
             "All",
@@ -159,7 +167,8 @@ function MonthDetailsPage() {
                                         <TransactionCard transaction={transaction} />
                                     </ListGroup.Item>
                                 )
-                            })}
+                            })
+                        }
                     </ListGroup>
                 </Card>
             </div>

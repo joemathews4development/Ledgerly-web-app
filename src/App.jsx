@@ -14,7 +14,6 @@ import { ThemeContext } from './context/theme.context'
 function App() {
 
   const { theme } = useContext(ThemeContext)
-  console.log("here", theme)
 
   return (
     <div className={`d-flex flex-column vh-100 ${theme}`}>
